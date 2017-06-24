@@ -9,20 +9,13 @@ type ReducerSet<STATE, ACTION> = Set<Reducer<STATE, ACTION>>
  * Almost same to MappedPipedReducer except using Set instead Array to hold reducers
  * By using Set, we can ensure our reducer is set ONLY ONCE.
  */
-export class MappedUniquePipeReducer<
-  STATE,
-  ACTION_TYPE = any,
-  ACTION extends Action = Action
-> {
+export class MappedUniquePipeReducer<STATE, ACTION_TYPE = any, ACTION extends Action = Action> {
   private reducerMap = new Map<ACTION_TYPE, ReducerSet<STATE, Action>>()
 
   /**
    * Append reducer functions for the given key
    */
-  public add = <
-    SETTED_ACTION extends ACTION,
-    SETTED_ACTION_TYPE extends SETTED_ACTION['type'] & ACTION_TYPE
-  >(
+  public add = <SETTED_ACTION extends ACTION, SETTED_ACTION_TYPE extends SETTED_ACTION['type'] & ACTION_TYPE>(
     actionTypeOrActionTypes: SETTED_ACTION_TYPE | SETTED_ACTION_TYPE[],
     reducerOrReducers: Reducer<STATE, SETTED_ACTION> | ReducerArray<STATE, SETTED_ACTION>,
   ) => {
@@ -46,10 +39,7 @@ export class MappedUniquePipeReducer<
   /**
    * Replace reducer functions for the given key
    */
-  public set = <
-    SETTED_ACTION extends ACTION,
-    SETTED_ACTION_TYPE extends SETTED_ACTION['type'] & ACTION_TYPE
-  >(
+  public set = <SETTED_ACTION extends ACTION, SETTED_ACTION_TYPE extends SETTED_ACTION['type'] & ACTION_TYPE>(
     actionTypeOrActionTypes: SETTED_ACTION_TYPE | SETTED_ACTION_TYPE[],
     reducerOrReducers: Reducer<STATE, SETTED_ACTION> | ReducerArray<STATE, SETTED_ACTION>,
   ) => {

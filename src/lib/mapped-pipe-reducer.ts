@@ -4,20 +4,13 @@ import {
 } from './types'
 
 type ReducerArray<STATE, ACTION> = Reducer<STATE, ACTION>[]
-export class MappedPipeReducer<
-  STATE,
-  ACTION_TYPE = any,
-  ACTION extends Action = Action
-> {
+export class MappedPipeReducer<STATE, ACTION_TYPE = any, ACTION extends Action = Action> {
   private reducerMap = new Map<ACTION_TYPE, ReducerArray<STATE, Action>>()
 
   /**
    * Append reducer functions for the given key
    */
-  public add = <
-    SETTED_ACTION extends ACTION,
-    SETTED_ACTION_TYPE extends SETTED_ACTION['type'] & ACTION_TYPE
-  >(
+  public add = <SETTED_ACTION extends ACTION, SETTED_ACTION_TYPE extends SETTED_ACTION['type'] & ACTION_TYPE>(
     actionTypeOrActionTypes: SETTED_ACTION_TYPE | SETTED_ACTION_TYPE[],
     reducerOrReducers: Reducer<STATE, SETTED_ACTION> | ReducerArray<STATE, SETTED_ACTION>,
   ) => {
@@ -40,10 +33,7 @@ export class MappedPipeReducer<
   /**
    * Replace reducer functions for the given key
    */
-  public set = <
-    SETTED_ACTION extends ACTION,
-    SETTED_ACTION_TYPE extends SETTED_ACTION['type'] & ACTION_TYPE
-  >(
+  public set = <SETTED_ACTION extends ACTION, SETTED_ACTION_TYPE extends SETTED_ACTION['type'] & ACTION_TYPE>(
     actionTypeOrActionTypes: SETTED_ACTION_TYPE | SETTED_ACTION_TYPE[],
     reducerOrReducers: Reducer<STATE, SETTED_ACTION> | ReducerArray<STATE, SETTED_ACTION>,
   ) => {

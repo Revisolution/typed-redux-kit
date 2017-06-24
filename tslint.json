@@ -12,6 +12,7 @@
     "curly": [true, "ignore-same-line"],
     "array-type": false,
     "max-classes-per-file": false,
+    "no-empty-interface": false,
     "trailing-comma": [
       true,
       {

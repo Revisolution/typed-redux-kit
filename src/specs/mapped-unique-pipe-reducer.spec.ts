@@ -1,3 +1,4 @@
+import { createStore } from 'redux'
 import {
   createActionCreator,
   MappedUniquePipeReducer,
@@ -5,7 +6,6 @@ import {
   PureAction,
   Reducer,
 } from '../lib'
-import { createStore } from 'redux'
 
 enum ActionTypes {
   Plus = 'test_Plus',
@@ -33,7 +33,7 @@ interface State {
 
 const initialState: State = {
   count: 0,
-  dispatchCount: 0
+  dispatchCount: 0,
 }
 
 const plusSubReducer = (state: State, action: Actions.PlusAction) => ({
@@ -48,7 +48,7 @@ const setSubReducer: Reducer<State, Actions.SetAction> = (state, action) => ({
 
 const masterReducer: Reducer<State, Action> = (state, action) => ({
   ...state,
-  dispatchCount: state.dispatchCount + 1
+  dispatchCount: state.dispatchCount + 1,
 })
 
 // Same usage to one's MappedPipeReducer

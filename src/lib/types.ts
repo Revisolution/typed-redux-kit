@@ -11,4 +11,4 @@ export interface PayloadAction <ACTION_TYPE, PAYLOAD> extends Redux.Action {
 
 export type Action = PureAction<any> | PayloadAction<any, any>
 
-type Reducer<STATE, ACTION> = (state: STATE, action: ACTION) => STATE
+export type Reducer<STATE, ACTION> = (state: STATE, action: ACTION) => STATE

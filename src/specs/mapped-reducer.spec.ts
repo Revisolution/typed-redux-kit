@@ -1,3 +1,4 @@
+import { createStore } from 'redux'
 import {
   createActionCreator,
   MappedReducer,
@@ -5,7 +6,6 @@ import {
   PureAction,
   Reducer,
 } from '../lib'
-import { createStore } from 'redux'
 
 enum ActionTypes {
   Plus = 'test_Plus',

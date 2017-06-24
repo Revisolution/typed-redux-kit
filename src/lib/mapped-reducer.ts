@@ -3,17 +3,10 @@ import {
   Reducer,
 } from './types'
 
-export class MappedReducer<
-  STATE,
-  ACTION_TYPE = any,
-  ACTION extends Action = Action
-> {
+export class MappedReducer<STATE, ACTION_TYPE = any, ACTION extends Action = Action> {
   private reducerMap = new Map<ACTION_TYPE, Reducer<STATE, Action>>()
 
-  public set = <
-    SETTED_ACTION extends ACTION,
-    SETTED_ACTION_TYPE extends SETTED_ACTION['type'] & ACTION_TYPE
-  >(
+  public set = <SETTED_ACTION extends ACTION, SETTED_ACTION_TYPE extends SETTED_ACTION['type'] & ACTION_TYPE>(
     actionTypeOrActionTypes: SETTED_ACTION_TYPE | SETTED_ACTION_TYPE[],
     reducer: Reducer<STATE, SETTED_ACTION>,
   ) => {
