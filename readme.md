@@ -61,7 +61,7 @@ const reducer = new MappedReducer<State, ActionTypes>()
   .set(ActionTypes.Plus, plusSubReducer)
   .set(ActionTypes.Set, setSubReducer)
   // Also, These wrong usage will thorw compiler errors
-  // because our reducer is too smart.
+  // because our reducer is smart enough.
   //
   // Wrong ActionType and Sub Reducer combination
   //
@@ -100,9 +100,9 @@ test('MappedReducer', () => {
 
 Please check `specs/*.spec.ts`! We've already prepared tons of comments there!
 
-1. [Basic usage & MappedReducer]([specs/mapped-reducer.spec.ts])
-2. [MappedPipeReducer]([specs/mapped-reducer.spec.ts])
-3. [MappedUniquePipeReducer]([specs/mapped-reducer.spec.ts])
+1. [Basic usage & MappedReducer](./src/specs/mapped-reducer.spec.ts)
+2. [MappedPipeReducer](./src/specs/mapped-pipe-reducer.spec.ts)
+3. [MappedUniquePipeReducer](./src/specs/mapped-unique-pipe-reducer.spec.ts)
 
 ## Author & Maintainer
 
