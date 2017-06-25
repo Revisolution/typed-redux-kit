@@ -2,3 +2,5 @@
 /build
 /node-build
 /typings
+.DS_Store
+*.log
