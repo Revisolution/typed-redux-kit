@@ -49,6 +49,7 @@
   "files": [
     "build/lib/*",
     "node-build/lib/*",
-    "typings/lib/*"
+    "typings/lib/*",
+    "src/lib/*"
   ]
 }
