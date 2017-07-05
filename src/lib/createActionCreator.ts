@@ -6,8 +6,8 @@ import {
 
 export function createActionCreator <ACTION extends PayloadAction<ACTION['type'], ACTION['payload']>>(type: ACTION['type']): (payload: ACTION['payload']) => ACTION
 export function createActionCreator <ACTION extends PureAction<ACTION['type']>>(type: ACTION['type']): () => ACTION
-export function createActionCreator <ACTION extends PayloadAction<ACTION['type'], ACTION['payload']>>(type: ACTION['type']): (payload: ACTION['payload']) => ACTION {
-  return (payload) => (
+export function createActionCreator <ACTION extends {type: any, payload?: any}>(type: ACTION['type']) {
+  return (payload: ACTION['payload']) => (
     payload == null
       ? ({
         type,
