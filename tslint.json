@@ -20,6 +20,7 @@
       false
     ],
     "arrow-parens": false,
-    "space-before-function-paren": false
+    "space-before-function-paren": false,
+    "callable-types": false
   }
 }

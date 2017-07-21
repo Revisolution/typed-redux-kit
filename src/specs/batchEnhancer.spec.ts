@@ -5,8 +5,6 @@ import { fork, take, put } from 'redux-saga/effects'
 import { batchable, batchEnhancer } from '../lib/batched-actions'
 
 test('batch', () => {
-  const BatchActionType = '@@typed-redux/batched-actions'
-
   interface State {
     count: number
   }
@@ -41,19 +39,17 @@ test('batch', () => {
       output.helloSagaCalled++
 
       // Inside of saga, you can dispatch batch action
-      yield put({
-        type: BatchActionType,
-        actions: [
-          {
-            type: 'SayBye'
-          },
-          {
-            type: 'SayBye'
-          },
-          {
-            type: 'SayBye'
-          },
-      ]})
+      yield put([
+        {
+          type: 'SayBye'
+        },
+        {
+          type: 'SayBye'
+        },
+        {
+          type: 'SayBye'
+        }
+      ])
     }
   }
 
@@ -70,20 +66,17 @@ test('batch', () => {
   })
 
   // Dispatch batch action
-  store.dispatch({
-    type: BatchActionType,
-    actions: [
-      {
-        type: 'SayHello'
-      },
-      {
-        type: 'SayHello'
-      },
-      {
-        type: 'SayHello'
-      }
-    ]
-  })
+  store.dispatch([
+    {
+      type: 'SayHello'
+    },
+    {
+      type: 'SayHello'
+    },
+    {
+      type: 'SayHello'
+    }
+  ])
 
   // Dispath single action
   store.dispatch({
