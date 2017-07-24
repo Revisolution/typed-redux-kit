@@ -1,4 +1,4 @@
-import { createStore } from 'redux'
+import { combineReducers, createStore } from 'redux'
 import {
   createActionCreator,
   MappedReducer,
@@ -66,6 +66,10 @@ interface State {
   message: string
 }
 
+interface ModuleState {
+  count: State
+}
+
 const initialState: State = {
   count: 0,
   message: 'No message!',
@@ -106,8 +110,20 @@ const randomReducer: Reducer<State, RandomAction> = (state, action) => state
  */
 const reducer = new MappedReducer<State, ActionTypes>()
 
+// When using this in a redux module structure all you need to do is pass the initial state as opts.initialState
+const moduleReducer = new MappedReducer<State, ActionTypes>({ initialState })
+
 // reducer#set is chainable
 reducer
+  .set(ActionTypes.Plus, plusSubReducer)
+  .set(ActionTypes.Set, setSubReducer)
+  .set([
+    ActionTypes.SayHello,
+    ActionTypes.SayBye,
+  ], sayReducer)
+
+// Usage with redux module setup is the same
+moduleReducer
   .set(ActionTypes.Plus, plusSubReducer)
   .set(ActionTypes.Set, setSubReducer)
   .set([
@@ -130,46 +146,106 @@ reducer
   // .set('UNWELCOMMED', sayReducer)
 
 const store = createStore(reducer.reduce, initialState)
+const moduleStore = createStore(combineReducers<ModuleState>({
+  count: moduleReducer.reduce,
+}))
 
 test('MappedReducer', () => {
   // Check if the reducer is set properly
   expect(reducer.get(ActionTypes.Plus)).toEqual(plusSubReducer)
+  expect(moduleReducer.get(ActionTypes.Plus)).toEqual(plusSubReducer)
 
+  /**
+   * 1. Plus action
+   */
   const plusAction = ActionCreators.plus()
   store.dispatch(plusAction)
+  moduleStore.dispatch(plusAction)
 
+  // Default store
   const firstReducedState = store.getState()
   expect(firstReducedState).toEqual({
     count: 1,
     message: 'No message!',
   })
 
+  // Module store
+  const firstReducedModuleState = moduleStore.getState()
+  expect(firstReducedModuleState).toEqual({
+    count: {
+      count: 1,
+      message: 'No message!',
+    },
+  })
+
+  /**
+   * 2. Set action
+   */
   const setAction = ActionCreators.set({
     count: 0,
   })
   store.dispatch(setAction)
+  moduleStore.dispatch(setAction)
 
+  // default store
   const secondReducedState = store.getState()
   expect(secondReducedState).toEqual({
     count: 0,
     message: 'No message!',
   })
 
+  // module store
+  const secondReducedModuleState = moduleStore.getState()
+  expect(secondReducedModuleState).toEqual({
+    count: {
+      count: 0,
+      message: 'No message!',
+    },
+  })
+
+  /**
+   * 3. Say hello action
+   */
   const sayHelloAction = ActionCreators.sayHello()
   store.dispatch(sayHelloAction)
+  moduleStore.dispatch(sayHelloAction)
 
+  // Default store
   const thirdReducedState = store.getState()
   expect(thirdReducedState).toEqual({
     count: 0,
     message: 'Hello!',
   })
 
+  // Module store
+  const thirdReducedModuleState = moduleStore.getState()
+  expect(thirdReducedModuleState).toEqual({
+    count: {
+      count: 0,
+      message: 'Hello!',
+    },
+  })
+
+  /**
+   * 4. Say bye action
+   */
   const sayByeAction = ActionCreators.sayBye()
   store.dispatch(sayByeAction)
+  moduleStore.dispatch(sayByeAction)
 
+  // default store
   const forthReducedState = store.getState()
   expect(forthReducedState).toEqual({
     count: 0,
     message: 'Bye!',
+  })
+
+  // module store
+  const forthReducedModuleState = moduleStore.getState()
+  expect(forthReducedModuleState).toEqual({
+    count: {
+      count: 0,
+      message: 'Bye!',
+    },
   })
 })
