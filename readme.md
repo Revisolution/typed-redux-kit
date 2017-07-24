@@ -71,6 +71,13 @@ const reducer = new MappedReducer<State, ActionTypes>()
   // Invalid Action Types
   // .set('UNWELCOMMED', plusSubReducer)
 
+  // If you want to use the MappedReducer as part of a module setup, you can just pass it an opts object
+  // with initialState as your initial state.
+  // new MappedReducer<State, ActionTypes>({ initialState })
+
+  // Then intialize your store like a module;
+  // createStore(combineReducers<State>({ count: reducer.reduce }))
+
 // Reducer has a reduce method, `reducer.reduce`. Just pass it to our store!
 const store = createStore(reducer.reduce, initialState)
 

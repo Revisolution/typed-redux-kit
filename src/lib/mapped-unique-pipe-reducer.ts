@@ -1,5 +1,6 @@
 import {
   Action,
+  MappedReducerOptions,
   Reducer,
 } from './types'
 
@@ -10,7 +11,13 @@ type ReducerSet<STATE, ACTION> = Set<Reducer<STATE, ACTION>>
  * By using Set, we can ensure our reducer is set ONLY ONCE.
  */
 export class MappedUniquePipeReducer<STATE, ACTION_TYPE = any, ACTION extends Action = Action> {
+  private initialState: STATE
+
   private reducerMap = new Map<ACTION_TYPE, ReducerSet<STATE, Action>>()
+
+  constructor(opts: MappedReducerOptions<STATE> = {}) {
+    this.initialState = opts.initialState
+  }
 
   /**
    * Append reducer functions for the given key
@@ -58,7 +65,7 @@ export class MappedUniquePipeReducer<STATE, ACTION_TYPE = any, ACTION extends Ac
 
   public get = <SETTED_ACTION_TYPE extends ACTION_TYPE>(actionType: SETTED_ACTION_TYPE) => Array.from(this.reducerMap.get(actionType))
 
-  public reduce = (state: STATE, action: ACTION): STATE => {
+  public reduce = (state: STATE = this.initialState, action: ACTION): STATE => {
     if (!this.reducerMap.has(action.type)) return state
     const reducers = Array.from(this.reducerMap.get(action.type))
     return reducers.reduce((aState, reducer) => reducer(aState, action), state)
