@@ -6,21 +6,30 @@
     "semicolon": [true, "never"],
     "quotemark": [true, "single"],
     "object-literal-sort-keys": false,
-    "max-line-length": false,
-    "interface-name": false,
+    "max-line-length": [false],
+    "interface-name": [false],
     "no-namespace": false,
     "curly": [true, "ignore-same-line"],
-    "array-type": false,
-    "max-classes-per-file": false,
+    "array-type": [false],
+    "max-classes-per-file": [false],
     "no-empty-interface": false,
-    "trailing-comma": [
-      "never"
-    ],
     "ordered-imports": [
       false
     ],
     "arrow-parens": false,
     "space-before-function-paren": false,
-    "callable-types": false
+    "callable-types": false,
+    "trailing-comma": [
+      true,
+      {
+        "singleline": "never",
+        "multiline": {
+          "objects": "always",
+          "arrays": "always",
+          "functions": "always",
+          "typeLiterals": "never"
+        }
+      }
+    ]
   }
 }

@@ -13,7 +13,7 @@ test('batch', () => {
   const myReducer = batchable((state: State, action) => {
     if (action.type === 'SayHello') {
       return {
-        count: state.count + 1
+        count: state.count + 1,
       }
     }
 
@@ -26,7 +26,7 @@ test('batch', () => {
   const output = {
     helloSagaCalled: 0,
     byeSagaCalled: 0,
-    listenerCalled: 0
+    listenerCalled: 0,
   }
 
   store.subscribe(() => {
@@ -41,14 +41,14 @@ test('batch', () => {
       // Inside of saga, you can dispatch batch action
       yield put([
         {
-          type: 'SayBye'
+          type: 'SayBye',
         },
         {
-          type: 'SayBye'
+          type: 'SayBye',
         },
         {
-          type: 'SayBye'
-        }
+          type: 'SayBye',
+        },
       ])
     }
   }
@@ -67,7 +67,7 @@ test('batch', () => {
 
   // Dispath single action
   store.dispatch({
-    type: 'SayHello'
+    type: 'SayHello',
   })
   expect(output).toEqual({
     byeSagaCalled: 3,
@@ -75,21 +75,21 @@ test('batch', () => {
     // Litener will be called twice
     // One from the above dispatch
     // One from saga
-    listenerCalled: 2
+    listenerCalled: 2,
   })
   expect(store.getState().count).toEqual(1)
 
   // Dispatch batch action
   store.dispatch([
     {
-      type: 'SayHello'
+      type: 'SayHello',
     },
     {
-      type: 'SayHello'
+      type: 'SayHello',
     },
     {
-      type: 'SayHello'
-    }
+      type: 'SayHello',
+    },
   ])
 
   // Although our reducer and saga will be called 4 times,
@@ -100,7 +100,7 @@ test('batch', () => {
     helloSagaCalled: 4,
     // Single dispatch + side effect
     // Single Batched dispatch + side effect of each batched action.
-    listenerCalled: 2 + 4
+    listenerCalled: 2 + 4,
   })
   expect(store.getState().count).toEqual(4)
 })

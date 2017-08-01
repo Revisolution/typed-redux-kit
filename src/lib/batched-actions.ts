@@ -31,7 +31,7 @@ export const batchable = <S, A extends Redux.Action>(reducer: (state: S, action:
   }
 }
 
-export const batchEnhancer =  <S>(sagaMiddleware: ReduxSaga.SagaMiddleware<S>): Redux.StoreEnhancer<S> => (createStore) => (reducer, preloadedState) => {
+export const batchEnhancer = <S>(sagaMiddleware: ReduxSaga.SagaMiddleware<S>): Redux.StoreEnhancer<S> => (createStore) => (reducer, preloadedState) => {
   const store = createStore(reducer, preloadedState)
 
   let sagaDispatcher: Redux.Dispatch<S>
@@ -42,7 +42,7 @@ export const batchEnhancer =  <S>(sagaMiddleware: ReduxSaga.SagaMiddleware<S>): 
       actionOrActions.forEach(sagaDispatcher)
       action = {
         type: BatchActionType,
-        actions: actionOrActions
+        actions: actionOrActions,
       } as Redux.Action
     } else {
       sagaDispatcher((actionOrActions as Redux.Action))
@@ -57,12 +57,12 @@ export const batchEnhancer =  <S>(sagaMiddleware: ReduxSaga.SagaMiddleware<S>): 
   sagaDispatcher = sagaMiddleware({
     getState: store.getState,
     // This dispatcher will be used by saga
-    dispatch: batchDispatcher
+    dispatch: batchDispatcher,
   })((a: Redux.Action) => a)
 
   // Replace dispatch with our one
   return {
     ...store,
-    dispatch: batchDispatcher
+    dispatch: batchDispatcher,
   } as Redux.Store<S>
 }
