@@ -65,6 +65,20 @@ test('batch', () => {
     yield fork(sayBye)
   })
 
+  // Dispath single action
+  store.dispatch({
+    type: 'SayHello'
+  })
+  expect(output).toEqual({
+    byeSagaCalled: 3,
+    helloSagaCalled: 1,
+    // Litener will be called twice
+    // One from the above dispatch
+    // One from saga
+    listenerCalled: 2
+  })
+  expect(store.getState().count).toEqual(1)
+
   // Dispatch batch action
   store.dispatch([
     {
@@ -78,16 +92,14 @@ test('batch', () => {
     }
   ])
 
-  // Dispath single action
-  store.dispatch({
-    type: 'SayHello'
-  })
-
   // Although our reducer and saga will be called 4 times,
   // the listener will be called only 2 times.
   expect(output).toEqual({
-    byeSagaCalled: 4 * 3,
+    // Now byeSaga will be called 12 times because helloSaga is called 4 times and each hello saga dispatch ByeAction 3 times. (4x3)
+    byeSagaCalled: (1 + 3) * 3,
     helloSagaCalled: 4,
+    // Single dispatch + side effect
+    // Single Batched dispatch + side effect of each batched action.
     listenerCalled: 2 + 4
   })
   expect(store.getState().count).toEqual(4)
