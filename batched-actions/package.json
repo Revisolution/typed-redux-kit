@@ -1,0 +1,7 @@
+{
+  "name": "typed-redux-kit/batched-actions",
+  "private": true,
+  "main": "../node-build/lib/batched-actions.js",
+  "types": "../typings/lib/batched-actions.d.js",
+  "module": "../build/lib/batched-actions.js"
+}
