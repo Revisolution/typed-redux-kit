@@ -2,7 +2,7 @@ import { createStore, Action, StoreCreator, Store, StoreEnhancer } from 'redux'
 import * as Redux from 'redux'
 import createSagaMiddleware, {SagaMiddleware} from 'redux-saga'
 import { fork, take, put } from 'redux-saga/effects'
-import { batchable, batchEnhancer } from '../lib/batched-actions'
+import { batchEnhancer } from '../lib'
 
 test('batch', () => {
   interface State {
@@ -10,7 +10,7 @@ test('batch', () => {
   }
   const initialState: State = {count: 0}
 
-  const myReducer = batchable((state: State, action) => {
+  const myReducer = (state: State, action: Redux.Action) => {
     if (action.type === 'SayHello') {
       return {
         count: state.count + 1,
@@ -18,7 +18,7 @@ test('batch', () => {
     }
 
     return state
-  })
+  }
 
   const sagaMiddleware: SagaMiddleware<State> = createSagaMiddleware()
   const store = createStore<State>(myReducer, initialState, batchEnhancer(sagaMiddleware))

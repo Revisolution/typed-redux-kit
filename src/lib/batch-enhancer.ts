@@ -15,14 +15,14 @@ declare module 'redux-saga/effects' {
   }
 }
 
-export const BatchActionType = '@@typed-redux/batched-actions'
+const BatchActionType = '@@typed-redux/batched-actions'
 
-export interface BatchAction {
-  type: typeof BatchActionType,
+interface BatchAction {
+  type: typeof BatchActionType
   actions: Redux.Action[]
 }
 
-export const batchable = <S, A extends Redux.Action>(reducer: (state: S, action: A | BatchAction) => S) => {
+const batchable = <S, A extends Redux.Action>(reducer: (state: S, action: A | BatchAction) => S) => {
   return (state: S, action: A | BatchAction) => {
     if (action.type === BatchActionType) {
       return (action as BatchAction).actions.reduce(reducer, state)
@@ -32,7 +32,7 @@ export const batchable = <S, A extends Redux.Action>(reducer: (state: S, action:
 }
 
 export const batchEnhancer = <S>(sagaMiddleware: ReduxSaga.SagaMiddleware<S>): Redux.StoreEnhancer<S> => (createStore) => (reducer, preloadedState) => {
-  const store = createStore(reducer, preloadedState)
+  const store = createStore(batchable(reducer), preloadedState)
 
   let sagaDispatcher: Redux.Dispatch<S>
 
