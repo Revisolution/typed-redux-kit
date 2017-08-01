@@ -67,7 +67,7 @@ interface State {
 }
 
 interface ModuleState {
-  count: State
+  myModule: State
 }
 
 const initialState: State = {
@@ -144,10 +144,11 @@ moduleReducer
   //   'UNWELCOMMED'
   // ], sayReducer)
   // .set('UNWELCOMMED', sayReducer)
+  // .set(ActionTypes.SayHello, randomReducer)
 
 const store = createStore(reducer.reduce, initialState)
 const moduleStore = createStore(combineReducers<ModuleState>({
-  count: moduleReducer.reduce,
+  myModule: moduleReducer.reduce,
 }))
 
 test('MappedReducer', () => {
@@ -172,7 +173,7 @@ test('MappedReducer', () => {
   // Module store
   const firstReducedModuleState = moduleStore.getState()
   expect(firstReducedModuleState).toEqual({
-    count: {
+    myModule: {
       count: 1,
       message: 'No message!',
     },
@@ -197,7 +198,7 @@ test('MappedReducer', () => {
   // module store
   const secondReducedModuleState = moduleStore.getState()
   expect(secondReducedModuleState).toEqual({
-    count: {
+    myModule: {
       count: 0,
       message: 'No message!',
     },
@@ -220,7 +221,7 @@ test('MappedReducer', () => {
   // Module store
   const thirdReducedModuleState = moduleStore.getState()
   expect(thirdReducedModuleState).toEqual({
-    count: {
+    myModule: {
       count: 0,
       message: 'Hello!',
     },
@@ -243,7 +244,7 @@ test('MappedReducer', () => {
   // module store
   const forthReducedModuleState = moduleStore.getState()
   expect(forthReducedModuleState).toEqual({
-    count: {
+    myModule: {
       count: 0,
       message: 'Bye!',
     },
