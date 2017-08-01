@@ -15,10 +15,10 @@ declare module 'redux-saga/effects' {
   }
 }
 
-const BatchActionType = '@@typed-redux/batched-actions'
+export const BatchActionType = '@@typed-redux/batched-actions'
 
-interface BatchAction {
-  type: string,
+export interface BatchAction {
+  type: typeof BatchActionType,
   actions: Redux.Action[]
 }
 
