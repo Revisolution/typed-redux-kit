@@ -17,7 +17,7 @@ declare module 'redux-saga/effects' {
 
 const BatchActionType = '@@typed-redux/batched-actions'
 
-interface BatchAction {
+interface BatchAction extends Redux.Action {
   type: typeof BatchActionType
   actions: Redux.Action[]
 }
@@ -43,10 +43,10 @@ export const batchEnhancer = <S>(sagaMiddleware: ReduxSaga.SagaMiddleware<S>): R
       action = {
         type: BatchActionType,
         actions: actionOrActions,
-      } as Redux.Action
+      } as BatchAction
     } else {
-      sagaDispatcher((actionOrActions as Redux.Action))
       action = actionOrActions as Redux.Action
+      sagaDispatcher(action)
     }
     return store.dispatch(action)
   }
