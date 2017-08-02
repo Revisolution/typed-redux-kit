@@ -1,8 +1,15 @@
-import { createStore, Action, StoreCreator, Store, StoreEnhancer } from 'redux'
+import { createStore, Action, StoreCreator, Store, StoreEnhancer, compose, applyMiddleware } from 'redux'
 import * as Redux from 'redux'
 import createSagaMiddleware, {SagaMiddleware} from 'redux-saga'
 import { fork, take, put } from 'redux-saga/effects'
 import { batchEnhancer } from '../lib'
+
+const sampleMiddleware: Redux.Middleware = function logger <S>(store: Redux.Store<S>): Redux.Dispatch<S> {
+  const next = store.dispatch
+  return function dispatchAndLog (action: Redux.Action) {
+    return next(action)
+  }
+}
 
 test('batch', () => {
   interface State {
@@ -20,8 +27,13 @@ test('batch', () => {
     return state
   }
 
-  const sagaMiddleware: SagaMiddleware<State> = createSagaMiddleware()
-  const store = createStore<State>(myReducer, initialState, batchEnhancer(sagaMiddleware))
+  const sagaMiddleware = createSagaMiddleware<State>()
+  const middlewareEnhancer: Redux.StoreEnhancer<State> = applyMiddleware(sampleMiddleware)
+  const enhancer = compose(
+    middlewareEnhancer,
+    batchEnhancer(sagaMiddleware),
+  )
+  const store = createStore(myReducer, initialState, enhancer)
 
   const output = {
     helloSagaCalled: 0,
