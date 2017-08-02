@@ -4,11 +4,8 @@ import createSagaMiddleware, {SagaMiddleware} from 'redux-saga'
 import { fork, take, put } from 'redux-saga/effects'
 import { batchEnhancer } from '../lib'
 
-const sampleMiddleware: Redux.Middleware = function logger <S>(store: Redux.Store<S>): Redux.Dispatch<S> {
-  const next = store.dispatch
-  return function dispatchAndLog (action: Redux.Action) {
-    return next(action)
-  }
+const sampleMiddleware: Redux.Middleware = () => next => (action: Redux.Action) => {
+  return next(action)
 }
 
 test('batch', () => {
