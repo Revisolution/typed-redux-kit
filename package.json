@@ -14,7 +14,7 @@
     "build:es": "tsc -p . -d --declarationDir typings",
     "build:node": "tsc -p . -m commonjs --outDir node-build",
     "build:watch": "tsc -p . -w",
-    "test": "jest",
+    "test": "jest -c jest.json",
     "test:watch": "jest --watch",
     "test:quick": "jest",
     "lint": "tslint -c ./tslint.json -p ./tsconfig.json",
@@ -42,7 +42,8 @@
     "redux": "^3.7.0",
     "redux-saga": "^0.15.6",
     "rimraf": "^2.6.1",
-    "tslint": "^5.4.3",
+    "source-map-support": "^0.4.15",
+    "tslint": "^5.5.0",
     "typescript": "^2.4.0"
   },
   "peerDependencies": {

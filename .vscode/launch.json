@@ -1,0 +1,29 @@
+{
+  "version": "0.1.0",
+  "configurations": [
+    {
+      "name": "Debug tests",
+      "type": "node",
+      "protocol": "inspector",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "./node_modules/jest-cli/bin/jest.js",
+        "-i",
+        "--env",
+        "./env.js",
+        "--no-cache", "--runInBand",  "--config", "jest.json",
+        "map.spec.js"
+      ],
+      "env": {
+          "NODE_ENV": "development"
+      },
+      "outFiles": ["${workspaceRoot}/build/**/*.js"],
+      "console": "integratedTerminal",
+      "port": 9229,
+      "sourceMaps": true,
+      "smartStep": true
+    }
+  ]
+}

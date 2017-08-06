@@ -10,6 +10,7 @@
       "statements": 100
     }
   },
+  "setupTestFrameworkScriptFile": "source-map-support/register",
   "testMatch": [
     "<rootDir>/build/specs/**/?(*.)(spec|test).js?(x)"
   ]
