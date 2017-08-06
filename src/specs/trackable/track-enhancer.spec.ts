@@ -12,8 +12,7 @@ test('it works', () => {
 
   const myReducer = (state: State = defaultState, action: Redux.Action) => {
     if (action.type === 'add') {
-      const childMap = state.get('a')
-      childMap.set('count', childMap.get('count') + 1)
+      state.get('a').update('count', (count) => count + 1)
     }
     return state
   }

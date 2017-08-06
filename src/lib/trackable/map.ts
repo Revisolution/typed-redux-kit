@@ -63,6 +63,12 @@ class TrackableMap<K extends string, V extends any> extends Trackable<TrackableM
     return this
   }
 
+  public update (key: K, mutator: (value: V) => V, defaultValue?: V) {
+    const value = this.get(key, defaultValue)
+    this.set(key, mutator(value))
+    return this
+  }
+
   public clone () {
     return new TrackableMap<K, V>(this)
   }
