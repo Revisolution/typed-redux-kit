@@ -1,4 +1,5 @@
 export abstract class Trackable<T>  {
+  public $$trackable = true
   public $$parent?: Trackable<any>
   public $$isChanged: boolean = false
 

@@ -15,7 +15,7 @@ class TrackableMap<K extends string, V extends any> extends Trackable<TrackableM
 
       this.internalMap = new Map()
       for (let [key, value] of entryIterable) {
-        if (value instanceof Trackable) {
+        if (value.$$trackable) {
           value.setParent(this)
           if (value.$$isChanged) {
             value = value.clone()
@@ -48,8 +48,8 @@ class TrackableMap<K extends string, V extends any> extends Trackable<TrackableM
     if (previousValue !== newValue) {
       this.markAsChanged()
       this.internalMap.set(key, newValue)
-      if ((newValue as any as Trackable<any>) instanceof Trackable) {
-        (newValue as any as Trackable<any>).setParent(this)
+      if (newValue.$$trackable) {
+        newValue.setParent(this)
       }
     }
     return this
@@ -76,8 +76,8 @@ class TrackableMap<K extends string, V extends any> extends Trackable<TrackableM
   public toJS (shallow: boolean = false) {
     const pureObject: {[key: string]: V} = {}
     for (const [key, value] of this) {
-      pureObject[key] = !shallow && value instanceof Trackable
-        ? (value as Trackable<any>).toJS()
+      pureObject[key] = !shallow && value.$$trackable
+        ? value.toJS()
         : value
     }
 
