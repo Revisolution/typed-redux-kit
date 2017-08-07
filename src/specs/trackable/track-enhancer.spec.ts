@@ -1,9 +1,15 @@
 import * as Redux from 'redux'
-import { trackEnhancer, TrackableMap } from '../../lib/trackable'
+import {
+  trackEnhancer,
+  TrackableMap,
+  TrackableRecord
+} from '../../lib/trackable'
 
 test('it works', () => {
-  type State = TrackableMap<string, TrackableMap<string, number>>
-  const defaultChildState = new TrackableMap({
+  type State = TrackableMap<string, TrackableRecord<{
+    count: number
+  }>>
+  const defaultChildState = TrackableRecord({
     count: 0,
   })
   const defaultState: State = new TrackableMap({
@@ -12,7 +18,7 @@ test('it works', () => {
 
   const myReducer = (state: State = defaultState, action: Redux.Action) => {
     if (action.type === 'add') {
-      state.get('a').update('count', (count) => count + 1)
+      state.get('a').count++
     }
     return state
   }

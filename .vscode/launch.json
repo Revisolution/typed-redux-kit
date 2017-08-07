@@ -13,8 +13,9 @@
         "-i",
         "--env",
         "./env.js",
-        "--no-cache", "--runInBand",  "--config", "jest.json",
-        "map.spec.js"
+        "--no-cache", "--runInBand",  "--config", "jest.json"
+        // , "record.spec.js"
+        // , "map.spec.js"
       ],
       "env": {
           "NODE_ENV": "development"
