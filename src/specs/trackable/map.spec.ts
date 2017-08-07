@@ -93,6 +93,17 @@ describe('TrackedMap', () => {
     })
   })
 
+  describe('update', () => {
+    it('updates a data with mutator', () => {
+      const tango = new TrackableMap([['a', 'a']])
+
+      tango.update('a', (str) => str + str)
+
+      expect(tango.$$isChanged).toBe(true)
+      expect(tango.get('a')).toBe('aa')
+    })
+  })
+
   describe('clone', () => {
     it('clones and return clean instance with same value', () => {
       const tango = new TrackableMap()
