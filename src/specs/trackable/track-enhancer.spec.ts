@@ -6,10 +6,14 @@ import {
 } from '../../lib/trackable'
 
 test('it works', () => {
-  type State = TrackableMap<string, TrackableRecord<{
+  const CountRecord = TrackableRecord({
+    count: 0,
+  })
+  type CountRecord = TrackableRecord<{
     count: number
-  }>>
-  const defaultChildState = TrackableRecord({
+  }>
+  type State = TrackableMap<string, CountRecord>
+  const defaultChildState = CountRecord({
     count: 0,
   })
   const defaultState: State = new TrackableMap({

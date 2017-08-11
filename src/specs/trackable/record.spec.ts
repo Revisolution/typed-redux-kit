@@ -3,10 +3,18 @@ import {
   TrackableMap,
 } from '../../lib/trackable'
 
-describe('test', () => {
+describe('TrackableRecord', () => {
+  const FamilyRecord = TrackableRecord({
+    father: '',
+  })
+  const UserRecord = TrackableRecord({
+    name: '',
+    family: FamilyRecord(),
+    map: new TrackableMap(),
+  })
   describe('constructor', () => {
     it('returns trackable record', () => {
-      const user = TrackableRecord({
+      const user = UserRecord({
         name: 'yolo',
       })
 
@@ -18,7 +26,7 @@ describe('test', () => {
 
   describe('set', () => {
     it('sets data and is marked as changed', () => {
-      const user = TrackableRecord({
+      const user = UserRecord({
         name: 'yolo',
       })
 
@@ -29,7 +37,7 @@ describe('test', () => {
     })
 
     it('marks as changed when child trackable map changed', () => {
-      const user = TrackableRecord({
+      const user = UserRecord({
         name: 'yolo',
         map: new TrackableMap({
           a: 'a',
@@ -44,9 +52,9 @@ describe('test', () => {
     })
 
     it('marks as changed when child trackable record changed', () => {
-      const user = TrackableRecord({
+      const user = UserRecord({
         name: 'yolo',
-        family: TrackableRecord({
+        family: FamilyRecord({
           father: 'Anakin Skywalker',
         }),
       })
@@ -57,10 +65,26 @@ describe('test', () => {
       expect(user.family.father).toBe('Darth Vader')
       expect(user.$$isChanged).toBe(true)
     })
+
+    describe('cloned', () => {
+      it('sets data and is marked as changed', () => {
+        const user = UserRecord({
+          name: 'yolo',
+        })
+
+        const newUser = user.clone()
+
+        newUser.name = 'test'
+        expect(newUser.$$isChanged).toBe(true)
+        expect(newUser.name).toBe('test')
+        expect(user.$$isChanged).toBe(false)
+        expect(user.name).toBe('yolo')
+      })
+    })
   })
 
   describe('update', () => {
-    const user = TrackableRecord({
+    const user = UserRecord({
       name: 'yolo',
     })
 
@@ -71,7 +95,7 @@ describe('test', () => {
   })
 
   describe('delete', () => {
-    const user = TrackableRecord({
+    const user = UserRecord({
       name: 'yolo',
     })
 
@@ -83,10 +107,10 @@ describe('test', () => {
 
   describe('clone', () => {
     it('clones nested record too', () => {
-      const familyRecord = TrackableRecord({
+      const familyRecord = FamilyRecord({
         father: 'Anakin Skywalker',
       })
-      const user = TrackableRecord({
+      const user = UserRecord({
         name: 'yolo',
         family: familyRecord,
       })
@@ -104,7 +128,7 @@ describe('test', () => {
 
   describe('toJS', () => {
     it('serializes record to pure object', () => {
-      const user = TrackableRecord({
+      const user = UserRecord({
         name: 'yolo',
       })
 
@@ -114,9 +138,9 @@ describe('test', () => {
     })
 
     it('serializes nested record', () => {
-      const user = TrackableRecord({
+      const user = UserRecord({
         name: 'yolo',
-        family: TrackableRecord({
+        family: FamilyRecord({
           father: 'Anakin Skywalker',
         }),
       })

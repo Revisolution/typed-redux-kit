@@ -4,13 +4,31 @@ import {
 } from './trackable'
 
 export type TrackableRecord<T> = T & TrackableRecordClass<T>
-export const TrackableRecord = <T extends {}>(object: T): TrackableRecord<T> => {
-  const record = new TrackableRecordClass(object)
-  return record as TrackableRecord<T>
+export const TrackableRecord = <T extends {}>(defaultValue: T): (object?: Partial<T>) => TrackableRecord<T> => {
+  class Extended extends TrackableRecordClass<T> {
+    public clone (): TrackableRecord<T> {
+      return new Extended(Object.assign({}, defaultValue, this.internalObject)) as TrackableRecord<T>
+    }
+  }
+  const keys = Object.keys(defaultValue)
+  keys.forEach(key => {
+    Object.defineProperty(Extended.prototype, key, {
+      set (newValue) {
+        this.set(key, newValue)
+      },
+      get () {
+        return this.get(key)
+      },
+    })
+  })
+  return (object?: Partial<T>) => {
+    const record = new Extended(Object.assign({}, defaultValue, object))
+    return record as TrackableRecord<T>
+  }
 }
 
-class TrackableRecordClass<T> extends Trackable<TrackableRecordClass<T>> {
-  private internalObject: T
+class TrackableRecordClass<T> extends Trackable<TrackableRecord<T>> {
+  protected internalObject: T
 
   constructor (entryIterableOrObject?: Iterable<[keyof T, T[keyof T]]> | T) {
     super()
@@ -28,14 +46,6 @@ class TrackableRecordClass<T> extends Trackable<TrackableRecordClass<T>> {
           }
         }
         this.internalObject[key] = value
-        Object.defineProperty(this, key, {
-          set: (newValue) => {
-            this.set(key, newValue)
-          },
-          get: () => {
-            return this.get(key)
-          },
-        })
       }
     } else {
       this.internalObject = {} as T
@@ -83,7 +93,7 @@ class TrackableRecordClass<T> extends Trackable<TrackableRecordClass<T>> {
   }
 
   public clone () {
-    return TrackableRecord(this.internalObject)
+    return new TrackableRecordClass(this.internalObject) as TrackableRecord<T>
   }
 
   public toJS <K extends keyof T>(shallow: boolean = false) {
