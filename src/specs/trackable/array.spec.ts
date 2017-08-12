@@ -154,8 +154,41 @@ describe('TrackableArray', () => {
     })
   })
 
+  describe('splice', () => {
+    it('discards items', () => {
+      const tango = TrackableArray<number>([1, 2, 3])
+
+      const deleted = tango.splice(1, 1)
+
+      expect(deleted).toEqual([2])
+      expect(tango.$trackable.isChanged).toBe(true)
+      expect(tango.slice()).toEqual([1, 3])
+    })
+
+    it('inserts items', () => {
+      const tango = TrackableArray<number>([1, 2, 3])
+
+      const deleted = tango.splice(1, 0, 1.25, 1.5, 1.75)
+
+      expect(deleted).toEqual([])
+      expect(tango.$trackable.isChanged).toBe(true)
+      expect(tango.slice()).toEqual([1, 1.25, 1.5, 1.75, 2, 3])
+    })
+
+    it('marks parent changed', () => {
+      const childTango = TrackableArray<number>([1])
+      const tango = TrackableArray<number[]>([
+        childTango,
+      ])
+
+      childTango.splice(0, 1)
+
+      expect(tango.$trackable.isChanged).toBe(true)
+    })
+  })
+
   describe('slice', () => {
-    it('returns a clean tangoay', () => {
+    it('returns a clean array', () => {
       const tango = TrackableArray<number>([1])
 
       const newTango = tango.slice()

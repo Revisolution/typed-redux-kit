@@ -106,6 +106,18 @@ class TrackableArrayClass<V> extends Trackable<TrackableArrayClass<V>> {
     return value
   }
 
+  public splice (start: number, deleteCount?: number, ...items: V[]) {
+    for (const item of items) {
+      setParentIfTrackable(item, this)
+    }
+    const deleted = this.internalArray.splice(start, deleteCount, ...items)
+    if (deleteCount > 0 || items.length > 0) {
+      this.markAsChanged()
+      this.reserveArrayBufferOnDemand()
+    }
+    return deleted
+  }
+
   public slice (start?: number, end?: number) {
     return this.internalArray.slice(start, end)
   }
