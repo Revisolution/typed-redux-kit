@@ -18,8 +18,8 @@ describe('TrackableRecord', () => {
         name: 'yolo',
       })
 
-      expect(user.$$trackable).toBe(true)
-      expect(user.$$isChanged).toBe(false)
+      expect(user.$trackable).toBeDefined()
+      expect(user.$trackable.isChanged).toBe(false)
       expect(user.name).toBe('yolo')
     })
   })
@@ -32,7 +32,7 @@ describe('TrackableRecord', () => {
 
       user.name = 'test'
 
-      expect(user.$$isChanged).toBe(true)
+      expect(user.$trackable.isChanged).toBe(true)
       expect(user.name).toBe('test')
     })
 
@@ -46,9 +46,9 @@ describe('TrackableRecord', () => {
 
       user.map.set('a', 'b')
 
-      expect(user.map.$$isChanged).toBe(true)
+      expect(user.map.$trackable.isChanged).toBe(true)
       expect(user.map.get('a')).toBe('b')
-      expect(user.$$isChanged).toBe(true)
+      expect(user.$trackable.isChanged).toBe(true)
     })
 
     it('marks as changed when child trackable record changed', () => {
@@ -61,9 +61,9 @@ describe('TrackableRecord', () => {
 
       user.family.father = 'Darth Vader'
 
-      expect(user.family.$$isChanged).toBe(true)
+      expect(user.family.$trackable.isChanged).toBe(true)
       expect(user.family.father).toBe('Darth Vader')
-      expect(user.$$isChanged).toBe(true)
+      expect(user.$trackable.isChanged).toBe(true)
     })
 
     describe('cloned', () => {
@@ -75,9 +75,9 @@ describe('TrackableRecord', () => {
         const newUser = user.clone()
 
         newUser.name = 'test'
-        expect(newUser.$$isChanged).toBe(true)
+        expect(newUser.$trackable.isChanged).toBe(true)
         expect(newUser.name).toBe('test')
-        expect(user.$$isChanged).toBe(false)
+        expect(user.$trackable.isChanged).toBe(false)
         expect(user.name).toBe('yolo')
       })
     })
@@ -90,7 +90,7 @@ describe('TrackableRecord', () => {
 
     user.update('name', (name) => name + 'yolo')
 
-    expect(user.$$isChanged).toBe(true)
+    expect(user.$trackable.isChanged).toBe(true)
     expect(user.name).toBe('yoloyolo')
   })
 
@@ -101,7 +101,7 @@ describe('TrackableRecord', () => {
 
     user.delete('name')
 
-    expect(user.$$isChanged).toBe(true)
+    expect(user.$trackable.isChanged).toBe(true)
     expect(user.name).toBeUndefined()
   })
 
@@ -119,9 +119,9 @@ describe('TrackableRecord', () => {
       const newUser = user.clone()
 
       expect(newUser).not.toBe(user)
-      expect(newUser.$$isChanged).toBe(false)
+      expect(newUser.$trackable.isChanged).toBe(false)
       expect(newUser.family).not.toBe(familyRecord)
-      expect(newUser.family.$$isChanged).toBe(false)
+      expect(newUser.family.$trackable.isChanged).toBe(false)
       expect(newUser.family.father).toBe('Darth Vader')
     })
   })

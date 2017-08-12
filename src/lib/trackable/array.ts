@@ -1,6 +1,9 @@
 import './polyfill'
 import {
-  Trackable
+  Trackable,
+  isTrackable,
+  initializeValue,
+  setParentIfTrackable,
 } from './trackable'
 
 let OBSERVABLE_ARRAY_BUFFER_SIZE = 0
@@ -20,12 +23,7 @@ class TrackableArrayClass<V> extends Trackable<TrackableArrayClass<V>> {
       this.internalArray = [] as V[]
       let index = 0
       for (let value of iterable) {
-        if ((value as any).$$trackable) {
-          (value as any).setParent(this)
-          if ((value as any).$$isChanged) {
-            value = (value as any).clone()
-          }
-        }
+        value = initializeValue(value, this)
         this.internalArray.push(value)
         index++
       }
@@ -56,9 +54,7 @@ class TrackableArrayClass<V> extends Trackable<TrackableArrayClass<V>> {
     if (previousValue !== newValue) {
       this.markAsChanged()
       this.internalArray[index] = newValue
-      if ((newValue as any).$$trackable) {
-        (newValue as any).setParent(this)
-      }
+      setParentIfTrackable(newValue, this)
     }
     return this
   }
@@ -70,8 +66,8 @@ class TrackableArrayClass<V> extends Trackable<TrackableArrayClass<V>> {
   public toJS (shallow: boolean = false) {
     const pureArray: V[] = []
     for (let [index, value] of this) {
-      value = !shallow && value.$$trackable
-        ? value.toJS()
+      value = !shallow && isTrackable(value)
+        ? (value as any as Trackable<any>).toJS()
         : value
       pureArray.push(value)
     }

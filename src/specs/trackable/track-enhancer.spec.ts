@@ -33,7 +33,7 @@ test('it works', () => {
   })
 
   const firstReducedState = store.getState()
-  expect(firstReducedState.get('a').get('count')).toBe(0)
+  expect(firstReducedState.get('a').count).toBe(0)
   expect(firstReducedState).toBe(defaultState)
 
   store.dispatch({
@@ -41,6 +41,6 @@ test('it works', () => {
   })
 
   const secondReducedState = store.getState()
-  expect(secondReducedState.get('a').get('count')).toBe(1)
+  expect(secondReducedState.get('a').count).toBe(1)
   expect(secondReducedState).not.toBe(defaultState)
 })

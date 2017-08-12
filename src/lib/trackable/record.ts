@@ -1,6 +1,9 @@
 import './polyfill'
 import {
-  Trackable
+  Trackable,
+  isTrackable,
+  setParentIfTrackable,
+  initializeValue,
 } from './trackable'
 
 export type TrackableRecord<T> = T & TrackableRecordClass<T>
@@ -10,6 +13,7 @@ export const TrackableRecord = <T extends {}>(defaultValue: T): (object?: Partia
       return new Extended(Object.assign({}, defaultValue, this.internalObject)) as TrackableRecord<T>
     }
   }
+
   const keys = Object.keys(defaultValue)
   keys.forEach(key => {
     Object.defineProperty(Extended.prototype, key, {
@@ -21,10 +25,17 @@ export const TrackableRecord = <T extends {}>(defaultValue: T): (object?: Partia
       },
     })
   })
+
   return (object?: Partial<T>) => {
     const record = new Extended(Object.assign({}, defaultValue, object))
     return record as TrackableRecord<T>
   }
+}
+
+const resolveEntryIterable = <T>(entryIterableOrObject: Iterable<[keyof T, T[keyof T]]> | T) => {
+  return !!(entryIterableOrObject as Iterable<[keyof T, T[keyof T]]>)[Symbol.iterator]
+    ? (entryIterableOrObject as Iterable<[keyof T, T[keyof T]]>)
+    : Object.entries(entryIterableOrObject) as Array<[keyof T, T[keyof T]]>
 }
 
 class TrackableRecordClass<T> extends Trackable<TrackableRecord<T>> {
@@ -33,19 +44,12 @@ class TrackableRecordClass<T> extends Trackable<TrackableRecord<T>> {
   constructor (entryIterableOrObject?: Iterable<[keyof T, T[keyof T]]> | T) {
     super()
     if (entryIterableOrObject) {
-      const entryIterable: Iterable<[keyof T, T[keyof T]]> = !!(entryIterableOrObject as Iterable<[keyof T, T[keyof T]]>)[Symbol.iterator]
-        ? (entryIterableOrObject as Iterable<[keyof T, T[keyof T]]>)
-        : Object.entries(entryIterableOrObject) as Array<[keyof T, T[keyof T]]>
+      const entryIterable = resolveEntryIterable(entryIterableOrObject)
 
       this.internalObject = {} as T
       for (let [key, value] of entryIterable) {
-        if ((value as any).$$trackable) {
-          (value as any).setParent(this)
-          if ((value as any).$$isChanged) {
-            value = (value as any).clone()
-          }
-        }
-        this.internalObject[key] = value
+        value = initializeValue(value, this)
+        this.internalObject[key] = value as T[keyof T]
       }
     } else {
       this.internalObject = {} as T
@@ -71,8 +75,8 @@ class TrackableRecordClass<T> extends Trackable<TrackableRecord<T>> {
     if (previousValue !== newValue) {
       this.markAsChanged()
       this.internalObject[key] = newValue
-      if ((newValue as any).$$trackable) {
-        (newValue as any).setParent(this)
+      if (isTrackable(newValue)) {
+        setParentIfTrackable(newValue, this)
       }
     }
     return this
@@ -99,7 +103,7 @@ class TrackableRecordClass<T> extends Trackable<TrackableRecord<T>> {
   public toJS <K extends keyof T>(shallow: boolean = false) {
     const pureObject: T = {} as T
     for (const [key, value] of this) {
-      pureObject[key as K] = !shallow && value.$$trackable
+      pureObject[key as K] = !shallow && isTrackable(value)
         ? value.toJS()
         : value
     }

@@ -28,7 +28,7 @@ describe('TrackedMap', () => {
         a: childTango,
       })
 
-      expect(childTango.$$parent).toBe(tango)
+      expect(childTango.$trackable.parent).toBe(tango)
     })
   })
 
@@ -47,7 +47,7 @@ describe('TrackedMap', () => {
 
       tango.set('a', childTango)
 
-      expect(childTango.$$parent).toBe(tango)
+      expect(childTango.$trackable.parent).toBe(tango)
     })
   })
 
@@ -55,7 +55,7 @@ describe('TrackedMap', () => {
     it('is not changed just after instantiate', () => {
       const tango = new TrackableMap()
 
-      expect(tango.$$isChanged).toBe(false)
+      expect(tango.$trackable.isChanged).toBe(false)
     })
 
     it('marks as changed itself after data set', () => {
@@ -63,7 +63,7 @@ describe('TrackedMap', () => {
 
       tango.set('a', 'a')
 
-      expect(tango.$$isChanged).toBe(true)
+      expect(tango.$trackable.isChanged).toBe(true)
     })
 
     it('is marked as changed when its children changed', () => {
@@ -77,8 +77,8 @@ describe('TrackedMap', () => {
       childTango.set('b', 'c')
 
       expect(childTango.get('b')).toBe('c')
-      expect(childTango.$$isChanged).toBe(true)
-      expect(tango.$$isChanged).toBe(true)
+      expect(childTango.$trackable.isChanged).toBe(true)
+      expect(tango.$trackable.isChanged).toBe(true)
     })
   })
 
@@ -88,7 +88,7 @@ describe('TrackedMap', () => {
 
       tango.delete('a')
 
-      expect(tango.$$isChanged).toBe(true)
+      expect(tango.$trackable.isChanged).toBe(true)
       expect(tango.get('a')).toBeUndefined()
     })
   })
@@ -99,7 +99,7 @@ describe('TrackedMap', () => {
 
       tango.update('a', (str) => str + str)
 
-      expect(tango.$$isChanged).toBe(true)
+      expect(tango.$trackable.isChanged).toBe(true)
       expect(tango.get('a')).toBe('aa')
     })
   })
@@ -112,7 +112,7 @@ describe('TrackedMap', () => {
       const clonedTango = tango.clone()
 
       expect(clonedTango.get('a')).toBe('a')
-      expect(clonedTango.$$isChanged).toBe(false)
+      expect(clonedTango.$trackable.isChanged).toBe(false)
     })
 
     it('clones and return clean instance with same value', () => {
@@ -126,9 +126,9 @@ describe('TrackedMap', () => {
 
       const clonedTango = tango.clone()
 
-      expect(clonedTango.$$isChanged).toBe(false)
+      expect(clonedTango.$trackable.isChanged).toBe(false)
       const childOfClonedTango = clonedTango.get('a')
-      expect(childOfClonedTango.$$isChanged).toBe(false)
+      expect(childOfClonedTango.$trackable.isChanged).toBe(false)
       expect(childOfClonedTango.get('b')).toBe('c')
     })
   })

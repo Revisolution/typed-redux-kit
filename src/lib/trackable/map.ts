@@ -1,9 +1,12 @@
 import './polyfill'
 import {
-  Trackable
+  Trackable,
+  isTrackable,
+  setParentIfTrackable,
+  initializeValue,
 } from './trackable'
 
-class TrackableMap<K extends string, V extends any> extends Trackable<TrackableMap<K, V>> {
+class TrackableMap<K extends string, V> extends Trackable<TrackableMap<K, V>> {
   private internalMap: Map<K, V>
 
   constructor (entryIterableOrObject?: Iterable<[K, V]> | {[key: string]: V}) {
@@ -15,12 +18,7 @@ class TrackableMap<K extends string, V extends any> extends Trackable<TrackableM
 
       this.internalMap = new Map()
       for (let [key, value] of entryIterable) {
-        if (value.$$trackable) {
-          value.setParent(this)
-          if (value.$$isChanged) {
-            value = value.clone()
-          }
-        }
+        value = initializeValue(value, this)
         this.internalMap.set(key, value)
       }
     } else {
@@ -48,9 +46,7 @@ class TrackableMap<K extends string, V extends any> extends Trackable<TrackableM
     if (previousValue !== newValue) {
       this.markAsChanged()
       this.internalMap.set(key, newValue)
-      if (newValue.$$trackable) {
-        newValue.setParent(this)
-      }
+      setParentIfTrackable(newValue, this)
     }
     return this
   }
@@ -76,8 +72,8 @@ class TrackableMap<K extends string, V extends any> extends Trackable<TrackableM
   public toJS (shallow: boolean = false) {
     const pureObject: {[key: string]: V} = {}
     for (const [key, value] of this) {
-      pureObject[key] = !shallow && value.$$trackable
-        ? value.toJS()
+      pureObject[key] = !shallow && isTrackable(value)
+        ? (value as any as Trackable<any>).toJS()
         : value
     }
 

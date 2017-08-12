@@ -2,10 +2,10 @@ import { Trackable } from './trackable'
 import * as Redux from 'redux'
 
 const terminalProcessor = <S>(reducer: Redux.Reducer<S>) => {
-  return (state: S, action: Redux.Action) => {
-    const reducedState = reducer(state, action)
+  return (state: S, action: Redux.Action): S => {
+    const reducedState: Trackable<any> = reducer(state, action) as any
 
-    return (reducedState instanceof Trackable) && (reducedState as Trackable<any>).$$isChanged
+    return reducedState.$trackable && reducedState.$trackable.isChanged
       ? reducedState.clone()
       : reducedState
   }

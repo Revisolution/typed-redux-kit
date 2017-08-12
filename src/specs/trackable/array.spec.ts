@@ -6,7 +6,7 @@ describe('TrackableArray', () => {
       const arr = TrackableArray<number>([1])
 
       expect(arr[0]).toBe(1)
-      expect(arr.$$isChanged).toBe(false)
+      expect(arr.$trackable.isChanged).toBe(false)
     })
   })
 
@@ -17,7 +17,7 @@ describe('TrackableArray', () => {
       arr[0] = 2
 
       expect(arr[0]).toBe(2)
-      expect(arr.$$isChanged).toBe(true)
+      expect(arr.$trackable.isChanged).toBe(true)
     })
   })
 
@@ -29,7 +29,7 @@ describe('TrackableArray', () => {
       const newArr = arr.clone()
 
       expect(newArr[0]).toBe(2)
-      expect(newArr.$$isChanged).toBe(false)
+      expect(newArr.$trackable.isChanged).toBe(false)
     })
   })
 
