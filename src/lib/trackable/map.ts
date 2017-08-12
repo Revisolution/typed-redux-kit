@@ -1,4 +1,3 @@
-import './polyfill'
 import {
   Trackable,
   isTrackable,

@@ -1,4 +1,3 @@
-import './polyfill'
 import {
   Trackable,
   isTrackable,
@@ -6,7 +5,8 @@ import {
   initializeValue,
 } from './trackable'
 import {
-  resolveEntryIterable
+  resolveEntryIterable,
+  getEntries,
 } from './util'
 
 export type TrackableRecord<T> = T & TrackableRecordClass<T>
@@ -54,7 +54,7 @@ class TrackableRecordClass<T> extends Trackable<TrackableRecord<T>> {
   }
 
   public [Symbol.iterator] () {
-    const entries = Object.entries(this.internalObject)
+    const entries = getEntries(this.internalObject)
     return entries[Symbol.iterator]()
   }
 
