@@ -9,7 +9,7 @@ import {
 let OBSERVABLE_ARRAY_BUFFER_SIZE = 0
 
 export type TrackableArray<V> = V[] & TrackableArrayClass<V>
-export const TrackableArray = <V extends {}>(iterable?: Iterable<V>): TrackableArray<V> => {
+export const TrackableArray = <V>(iterable?: Iterable<V>): TrackableArray<V> => {
   const record = new TrackableArrayClass(iterable)
   return record as TrackableArray<V>
 }
@@ -27,9 +27,7 @@ class TrackableArrayClass<V> extends Trackable<TrackableArrayClass<V>> {
         this.internalArray.push(value)
         index++
       }
-      if (this.internalArray.length > OBSERVABLE_ARRAY_BUFFER_SIZE) {
-        reserveArrayBuffer(this.internalArray.length)
-      }
+      this.reserveArrayBufferOnDemand()
     } else {
       this.internalArray = []
     }
@@ -55,8 +53,57 @@ class TrackableArrayClass<V> extends Trackable<TrackableArrayClass<V>> {
       this.markAsChanged()
       this.internalArray[index] = newValue
       setParentIfTrackable(newValue, this)
+      this.reserveArrayBufferOnDemand()
     }
     return this
+  }
+
+  public push (...newValues: V[]) {
+    if (newValues.length > 0) {
+      this.internalArray.push(...newValues)
+      this.markAsChanged()
+      for (const newValue of newValues) {
+        setParentIfTrackable(newValue, this)
+      }
+      this.reserveArrayBufferOnDemand()
+    }
+    return this.internalArray.length
+  }
+
+  public pop () {
+    let value: V
+    if (this.internalArray.length > 0) {
+      value = this.internalArray.pop()
+      this.markAsChanged()
+      this.reserveArrayBufferOnDemand()
+    }
+    return value
+  }
+
+  public unshift (...newValues: V[]) {
+    if (newValues.length > 0) {
+      this.internalArray.unshift(...newValues)
+      this.markAsChanged()
+      for (const newValue of newValues) {
+        setParentIfTrackable(newValue, this)
+      }
+      this.reserveArrayBufferOnDemand()
+    }
+    return this.internalArray.length
+  }
+
+  public shift () {
+    let value: V
+    if (this.internalArray.length > 0) {
+      value = this.internalArray.shift()
+      this.markAsChanged()
+      this.reserveArrayBufferOnDemand()
+    }
+    return value
+  }
+
+  public slice (start?: number, end?: number) {
+    return this.internalArray.slice(start, end)
   }
 
   public clone () {
@@ -73,6 +120,12 @@ class TrackableArrayClass<V> extends Trackable<TrackableArrayClass<V>> {
     }
 
     return pureArray
+  }
+
+  private reserveArrayBufferOnDemand () {
+    if (this.internalArray.length > OBSERVABLE_ARRAY_BUFFER_SIZE) {
+      reserveArrayBuffer(this.internalArray.length)
+    }
   }
 }
 
