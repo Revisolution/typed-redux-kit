@@ -39,6 +39,10 @@ class TrackableMap<K extends string, V> extends Trackable<TrackableMap<K, V>> {
     this.markAsChanged()
   }
 
+  public has (key: K) {
+    return this.internalMap.has(key)
+  }
+
   public get (key: K, defaultValue?: V): V {
     if (!this.internalMap.has(key)) {
       return defaultValue
@@ -75,6 +79,18 @@ class TrackableMap<K extends string, V> extends Trackable<TrackableMap<K, V>> {
       this.internalMap = new Map()
       this.markAsChanged()
     }
+  }
+
+  public entries () {
+    return this.internalMap.entries()
+  }
+
+  public keys () {
+    return this.internalMap.keys()
+  }
+
+  public values () {
+    return this.internalMap.values()
   }
 
   public clone () {

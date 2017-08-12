@@ -4,22 +4,22 @@ describe('TrackedMap', () => {
   describe('constructor', () => {
     it('constructs with object', () => {
       const tango = new TrackableMap({
-        a: 'a',
+        a: 1,
       })
 
-      expect(tango.get('a')).toBe('a')
+      expect(tango.get('a')).toBe(1)
     })
 
     it('constructs with entry array', () => {
-      const tango = new TrackableMap([['a', 'a']])
+      const tango = new TrackableMap([['a', 1]])
 
-      expect(tango.get('a')).toBe('a')
+      expect(tango.get('a')).toBe(1)
     })
 
     it('constructs with entry iterable', () => {
-      const tango = new TrackableMap(new Map().set('a', 'a'))
+      const tango = new TrackableMap(new Map().set('a', 1))
 
-      expect(tango.get('a')).toBe('a')
+      expect(tango.get('a')).toBe(1)
     })
 
     it('set parent to children with tracked interface', () => {
@@ -34,22 +34,38 @@ describe('TrackedMap', () => {
 
   describe('size', () => {
     it('presents size of map', () => {
-      const tango = new TrackableMap([['a', 'a']])
+      const tango = new TrackableMap([['a', 1]])
 
       expect(tango.size).toBe(1)
     })
   })
 
-  describe('set', () => {
-    it('sets new value', () => {
-      const tango = new TrackableMap()
-      tango
-        .set('a', 'a')
+  describe('has', () => {
+    it('check if map has a value for key', () => {
+      const tango = new TrackableMap([['a', 1]])
 
-      expect(tango.get('a')).toBe('a')
+      expect(tango.has('a')).toBe(true)
+    })
+  })
+
+  describe('get', () => {
+    it('return a value for key', () => {
+      const tango = new TrackableMap([['a', 1]])
+
+      expect(tango.get('a')).toBe(1)
+    })
+  })
+
+  describe('set', () => {
+    it('sets a new value', () => {
+      const tango = new TrackableMap()
+
+      tango.set('a', 1)
+
+      expect(tango.get('a')).toBe(1)
     })
 
-    it('sets parent to new value if new value is tracked', () => {
+    it('sets parent to a new value if the new value is trackable', () => {
       const childTango = new TrackableMap()
       const tango = new TrackableMap()
 
@@ -59,7 +75,7 @@ describe('TrackedMap', () => {
     })
   })
 
-  describe('$$isChanged', () => {
+  describe('$trackable.isChanged', () => {
     it('is not changed just after instantiate', () => {
       const tango = new TrackableMap()
 
@@ -69,22 +85,22 @@ describe('TrackedMap', () => {
     it('marks as changed itself after data set', () => {
       const tango = new TrackableMap()
 
-      tango.set('a', 'a')
+      tango.set('a', 1)
 
       expect(tango.$trackable.isChanged).toBe(true)
     })
 
     it('is marked as changed when its children changed', () => {
       const childTango = new TrackableMap({
-        b: 'b',
+        b: 2,
       })
       const tango = new TrackableMap({
         a: childTango,
       })
 
-      childTango.set('b', 'c')
+      childTango.set('b', 3)
 
-      expect(childTango.get('b')).toBe('c')
+      expect(childTango.get('b')).toBe(3)
       expect(childTango.$trackable.isChanged).toBe(true)
       expect(tango.$trackable.isChanged).toBe(true)
     })
@@ -92,7 +108,7 @@ describe('TrackedMap', () => {
 
   describe('delete', () => {
     it('deletes a data by key', () => {
-      const tango = new TrackableMap([['a', 'a']])
+      const tango = new TrackableMap([['a', 1]])
 
       tango.delete('a')
 
@@ -103,18 +119,18 @@ describe('TrackedMap', () => {
 
   describe('update', () => {
     it('updates a data with mutator', () => {
-      const tango = new TrackableMap([['a', 'a']])
+      const tango = new TrackableMap([['a', 1]])
 
       tango.update('a', (str) => str + str)
 
       expect(tango.$trackable.isChanged).toBe(true)
-      expect(tango.get('a')).toBe('aa')
+      expect(tango.get('a')).toBe(2)
     })
   })
 
   describe('clear', () => {
     it('clears all value', () => {
-      const tango = new TrackableMap([['a', 'a']])
+      const tango = new TrackableMap([['a', 1]])
 
       tango.clear()
 
@@ -131,49 +147,82 @@ describe('TrackedMap', () => {
     })
   })
 
+  describe('entries', () => {
+    it('returns iterator of entries, which is key/value array', () => {
+      const tango = new TrackableMap([['a', 1], ['b', 2]])
+
+      const entries = tango.entries()
+
+      expect(entries.next().value).toEqual(['a', 1])
+      expect(entries.next().value).toEqual(['b', 2])
+    })
+  })
+
+  describe('keys', () => {
+    it('returns iterator of keys', () => {
+      const tango = new TrackableMap([['a', 1], ['b', 2]])
+
+      const entries = tango.keys()
+
+      expect(entries.next().value).toBe('a')
+      expect(entries.next().value).toBe('b')
+    })
+  })
+
+  describe('values', () => {
+    it('returns iterator of values', () => {
+      const tango = new TrackableMap([['a', 1], ['b', 2]])
+
+      const entries = tango.values()
+
+      expect(entries.next().value).toBe(1)
+      expect(entries.next().value).toBe(2)
+    })
+  })
+
   describe('clone', () => {
     it('clones and return clean instance with same value', () => {
       const tango = new TrackableMap()
-      tango.set('a', 'a')
+      tango.set('a', 1)
 
       const clonedTango = tango.clone()
 
-      expect(clonedTango.get('a')).toBe('a')
+      expect(clonedTango.get('a')).toBe(1)
       expect(clonedTango.$trackable.isChanged).toBe(false)
     })
 
     it('clones and return clean instance with same value', () => {
       const childTango = new TrackableMap({
-        b: 'b',
+        b: 2,
       })
       const tango = new TrackableMap({
         a: childTango,
       })
-      childTango.set('b', 'c')
+      childTango.set('b', 3)
 
       const clonedTango = tango.clone()
 
       expect(clonedTango.$trackable.isChanged).toBe(false)
       const childOfClonedTango = clonedTango.get('a')
       expect(childOfClonedTango.$trackable.isChanged).toBe(false)
-      expect(childOfClonedTango.get('b')).toBe('c')
+      expect(childOfClonedTango.get('b')).toBe(3)
     })
   })
 
   describe('toJS', () => {
     it('returns pure object', () => {
       const tango = new TrackableMap({
-        a: 'a',
+        a: 1,
       })
 
       expect(tango.toJS()).toEqual({
-        a: 'a',
+        a: 1,
       })
     })
 
     it('resolves nested tracked too', () => {
       const childTango = new TrackableMap({
-        b: 'b',
+        b: 2,
       })
       const tango = new TrackableMap({
         a: childTango,
@@ -181,14 +230,14 @@ describe('TrackedMap', () => {
 
       expect(tango.toJS()).toEqual({
         a: {
-          b: 'b',
+          b: 2,
         },
       })
     })
 
     it('resolves shallowly if got true', () => {
       const childTango = new TrackableMap({
-        b: 'b',
+        b: 2,
       })
       const tango = new TrackableMap({
         a: childTango,
