@@ -187,6 +187,51 @@ describe('TrackableArray', () => {
     })
   })
 
+  describe('copyWithin', () => {
+    it('fills all items with a value', () => {
+      const tango = TrackableArray<number>([1, 2, 3])
+
+      tango.copyWithin(0, 1)
+
+      expect(tango.$trackable.isChanged).toBe(true)
+      expect(tango.slice()).toEqual([2, 3, 3])
+    })
+  })
+
+  describe('fill', () => {
+    it('fills all items with a value', () => {
+      const tango = TrackableArray<number>([1, 2, 3])
+
+      tango.fill(1)
+
+      expect(tango.$trackable.isChanged).toBe(true)
+      expect(tango.slice()).toEqual([1, 1, 1])
+    })
+    it('sets parent of a trackable value', () => {
+      const childTango = TrackableArray<number>([1])
+      const tango = TrackableArray<number[]>([
+        childTango,
+      ])
+      const newChild = TrackableArray<number>([2])
+
+      tango.fill(newChild)
+
+      expect(tango.$trackable.isChanged).toBe(true)
+      expect(newChild.$trackable.parent).toBe(tango)
+    })
+  })
+
+  describe('reverse', () => {
+    it('reverses items', () => {
+      const tango = TrackableArray<number>([1, 2, 3])
+
+      tango.reverse()
+
+      expect(tango.$trackable.isChanged).toBe(true)
+      expect(tango.slice()).toEqual([3, 2, 1])
+    })
+  })
+
   describe('slice', () => {
     it('returns a clean array', () => {
       const tango = TrackableArray<number>([1])
@@ -195,6 +240,17 @@ describe('TrackableArray', () => {
 
       expect(Array.isArray(newTango)).toBe(true)
       expect(newTango[0]).toBe(1)
+    })
+  })
+
+  describe('sort', () => {
+    it('reverses items', () => {
+      const tango = TrackableArray<number>([3, 2, 1])
+
+      tango.sort()
+
+      expect(tango.$trackable.isChanged).toBe(true)
+      expect(tango.slice()).toEqual([1, 2, 3])
     })
   })
 

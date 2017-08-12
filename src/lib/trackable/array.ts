@@ -1,10 +1,12 @@
-import './polyfill'
 import {
   Trackable,
   isTrackable,
   initializeValue,
   setParentIfTrackable,
 } from './trackable'
+import {
+  getEntries
+} from './util'
 
 let OBSERVABLE_ARRAY_BUFFER_SIZE = 0
 
@@ -38,18 +40,13 @@ class TrackableArrayClass<V> extends Trackable<TrackableArrayClass<V>> {
   }
 
   public [Symbol.iterator] () {
-    const entries = Object.entries(this.internalArray)
+    const entries = getEntries(this.internalArray)
     return entries[Symbol.iterator]()
   }
 
-  public onChildChange (child: any) {
-    this.markAsChanged()
-  }
-
-  public get (index: number, defaultValue?: V): V {
-    if (this.internalArray[index] === undefined) return defaultValue
-    return this.internalArray[index]
-  }
+  /**
+   * Modifier
+   */
 
   public set (index: number, newValue: V) {
     const previousValue = this.internalArray[index]
@@ -118,8 +115,135 @@ class TrackableArrayClass<V> extends Trackable<TrackableArrayClass<V>> {
     return deleted
   }
 
+  public copyWithin (target: number, start?: number, end?: number) {
+    if (target !== 0 || start !== 0) {
+      this.internalArray.copyWithin(target, start, end)
+      this.markAsChanged()
+    }
+    return this
+  }
+
+  public fill (value: V, start?: number, end?: number) {
+    if (this.internalArray.length > 0) {
+      setParentIfTrackable(value, this)
+      this.internalArray.fill(value, start, end)
+      this.markAsChanged()
+    }
+    return this
+  }
+
+  public reverse () {
+    if (this.internalArray.length > 0) {
+      this.internalArray.reverse()
+      this.markAsChanged()
+    }
+    return this
+  }
+
+  public sort (compare?: (a: V, b: V) => number) {
+    if (this.internalArray.length > 0) {
+      this.internalArray.sort(compare)
+      this.markAsChanged()
+    }
+    return this
+  }
+
+  /**
+   * Selectors
+   */
+
+  public get (index: number, defaultValue?: V): V {
+    if (this.internalArray[index] === undefined) return defaultValue
+    return this.internalArray[index]
+  }
+
   public slice (start?: number, end?: number) {
     return this.internalArray.slice(start, end)
+  }
+
+  public concat (...arrays: Array<TrackableArray<V>>) {
+    return this.internalArray.concat(...arrays.map((array) => array.$trackable
+      ? array.slice()
+      : array
+    ))
+  }
+
+  public entries (): IterableIterator<[number, V]> {
+    return this.internalArray.entries()
+  }
+
+  public every (callback: (value: V, index: number, array: V[]) => boolean, thisArg?: any): boolean {
+    return this.internalArray.every(callback, thisArg)
+  }
+
+  public filter (callback: (value: V, index: number, array: V[]) => any, thisArg?: any): V[] {
+    return this.internalArray.filter(callback, thisArg)
+  }
+
+  public find (predicate: (this: void, value: V, index: number, obj: Array<V>) => boolean): V | undefined
+  public find <Z>(predicate: (this: Z, value: V, index: number, obj: Array<V>) => boolean, thisArg?: Z): V | undefined {
+    return this.internalArray.find(predicate, thisArg)
+  }
+
+  public findIndex (predicate: (this: void, value: V, index: number, obj: Array<V>) => boolean): number
+  public findIndex <Z>(predicate: (this: Z, value: V, index: number, obj: Array<V>) => boolean, thisArg?: Z): number {
+    return this.internalArray.findIndex(predicate, thisArg)
+  }
+
+  public includes (searchElement: V, fromIndex?: number): boolean {
+    return this.internalArray.includes(searchElement, fromIndex)
+  }
+
+  public indexOf (searchElement: V, fromIndex?: number): number {
+    return this.internalArray.indexOf(searchElement, fromIndex)
+  }
+
+  public join (seperator?: string): string {
+    return this.internalArray.join(seperator)
+  }
+
+  public keys (): IterableIterator<number> {
+    return this.internalArray.keys()
+  }
+
+  public lastIndexOf (searchElement: V, fromIndex?: number): number {
+    return this.internalArray.lastIndexOf(searchElement, fromIndex)
+  }
+
+  public map <U>(callback: (value: V, index: number, array: V[]) => U, thisArg?: any): U[] {
+    return this.internalArray.map(callback, thisArg)
+  }
+
+  public reduce <U>(callback: (previousValue: U, currentValue: V, currentIndex: number, array: V[]) => U, initialValue?: U): U {
+    return this.internalArray.reduce(callback, initialValue)
+  }
+
+  public reduceRight <U>(callback: (previousValue: U, currentValue: V, currentIndex: number, array: V[]) => U, initialValue?: U): U {
+    return this.internalArray.reduceRight(callback, initialValue)
+  }
+
+  public some (callback: (value: V, index: number, array: V[]) => boolean, thisArg?: any): boolean {
+    return this.internalArray.some(callback, thisArg)
+  }
+
+  public toLocaleString (): string {
+    return this.internalArray.toLocaleString()
+  }
+
+  public toString (): string {
+    return this.internalArray.toString()
+  }
+
+  public values (): IterableIterator<V> {
+    return this.internalArray.values()
+  }
+
+  /**
+   * Trackable Specifics
+   */
+
+  public onChildChange (child: any) {
+    this.markAsChanged()
   }
 
   public clone () {
