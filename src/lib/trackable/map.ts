@@ -5,16 +5,21 @@ import {
   setParentIfTrackable,
   initializeValue,
 } from './trackable'
+import {
+  resolveEntryIterable
+} from './util'
 
 class TrackableMap<K extends string, V> extends Trackable<TrackableMap<K, V>> {
   private internalMap: Map<K, V>
 
+  public get size (): number {
+    return this.internalMap.size
+  }
+
   constructor (entryIterableOrObject?: Iterable<[K, V]> | {[key: string]: V}) {
     super()
     if (entryIterableOrObject) {
-      const entryIterable: Iterable<[K, V]> = !!(entryIterableOrObject as Iterable<[K, V]>)[Symbol.iterator]
-        ? (entryIterableOrObject as Iterable<[K, V]>)
-        : Object.entries(entryIterableOrObject) as Array<[K, V]>
+      const entryIterable = resolveEntryIterable(entryIterableOrObject)
 
       this.internalMap = new Map()
       for (let [key, value] of entryIterable) {
@@ -63,6 +68,13 @@ class TrackableMap<K extends string, V> extends Trackable<TrackableMap<K, V>> {
     const value = this.get(key, defaultValue)
     this.set(key, mutator(value))
     return this
+  }
+
+  public clear () {
+    if (this.internalMap.size > 0) {
+      this.internalMap = new Map()
+      this.markAsChanged()
+    }
   }
 
   public clone () {

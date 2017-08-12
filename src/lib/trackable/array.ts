@@ -17,6 +17,10 @@ export const TrackableArray = <V>(iterable?: Iterable<V>): TrackableArray<V> => 
 class TrackableArrayClass<V> extends Trackable<TrackableArrayClass<V>> {
   private internalArray: V[]
 
+  public get length (): number {
+    return this.internalArray.length
+  }
+
   constructor (iterable?: Iterable<V>) {
     super()
     if (iterable && iterable[Symbol.iterator]) {

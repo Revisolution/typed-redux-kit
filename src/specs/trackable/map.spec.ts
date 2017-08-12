@@ -32,6 +32,14 @@ describe('TrackedMap', () => {
     })
   })
 
+  describe('size', () => {
+    it('presents size of map', () => {
+      const tango = new TrackableMap([['a', 'a']])
+
+      expect(tango.size).toBe(1)
+    })
+  })
+
   describe('set', () => {
     it('sets new value', () => {
       const tango = new TrackableMap()
@@ -101,6 +109,25 @@ describe('TrackedMap', () => {
 
       expect(tango.$trackable.isChanged).toBe(true)
       expect(tango.get('a')).toBe('aa')
+    })
+  })
+
+  describe('clear', () => {
+    it('clears all value', () => {
+      const tango = new TrackableMap([['a', 'a']])
+
+      tango.clear()
+
+      expect(tango.$trackable.isChanged).toBe(true)
+      expect(tango.get('a')).toBeUndefined()
+    })
+
+    it('doesnt mark if nothing changed', () => {
+      const tango = new TrackableMap([])
+
+      tango.clear()
+
+      expect(tango.$trackable.isChanged).toBe(false)
     })
   })
 

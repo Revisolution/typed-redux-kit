@@ -5,6 +5,9 @@ import {
   setParentIfTrackable,
   initializeValue,
 } from './trackable'
+import {
+  resolveEntryIterable
+} from './util'
 
 export type TrackableRecord<T> = T & TrackableRecordClass<T>
 export const TrackableRecord = <T extends {}>(defaultValue: T): (object?: Partial<T>) => TrackableRecord<T> => {
@@ -30,12 +33,6 @@ export const TrackableRecord = <T extends {}>(defaultValue: T): (object?: Partia
     const record = new Extended(Object.assign({}, defaultValue, object))
     return record as TrackableRecord<T>
   }
-}
-
-const resolveEntryIterable = <T>(entryIterableOrObject: Iterable<[keyof T, T[keyof T]]> | T) => {
-  return !!(entryIterableOrObject as Iterable<[keyof T, T[keyof T]]>)[Symbol.iterator]
-    ? (entryIterableOrObject as Iterable<[keyof T, T[keyof T]]>)
-    : Object.entries(entryIterableOrObject) as Array<[keyof T, T[keyof T]]>
 }
 
 class TrackableRecordClass<T> extends Trackable<TrackableRecord<T>> {
