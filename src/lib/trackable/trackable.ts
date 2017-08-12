@@ -1,4 +1,4 @@
-interface TrackableProperties {
+export interface TrackableProperties {
   parent?: Trackable<any>
   isChanged: boolean
   shallow: boolean

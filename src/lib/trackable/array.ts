@@ -16,7 +16,7 @@ export const TrackableArray = <V>(iterable?: Iterable<V>): TrackableArray<V> => 
   return record as TrackableArray<V>
 }
 
-class TrackableArrayClass<V> extends Trackable<TrackableArrayClass<V>> {
+export class TrackableArrayClass<V> extends Trackable<TrackableArrayClass<V>> {
   private internalArray: V[]
 
   public get length (): number {

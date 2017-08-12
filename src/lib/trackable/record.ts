@@ -35,7 +35,7 @@ export const TrackableRecord = <T extends {}>(defaultValue: T): (object?: Partia
   }
 }
 
-class TrackableRecordClass<T> extends Trackable<TrackableRecord<T>> {
+export class TrackableRecordClass<T> extends Trackable<TrackableRecord<T>> {
   protected internalObject: T
 
   constructor (entryIterableOrObject?: Iterable<[keyof T, T[keyof T]]> | T) {
