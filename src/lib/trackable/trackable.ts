@@ -4,8 +4,8 @@ interface TrackableProperties {
   shallow: boolean
 }
 
-export const isTrackable = (maybeTrackable: any) => {
-  return (maybeTrackable as Trackable<any>).$trackable
+export const isTrackable = (maybeTrackable: any): boolean => {
+  return !!(maybeTrackable as Trackable<any>).$trackable
 }
 
 export const setParentIfTrackable = (maybeTrackable: any, parent: Trackable<any>) => {
@@ -14,12 +14,12 @@ export const setParentIfTrackable = (maybeTrackable: any, parent: Trackable<any>
   }
 }
 
-export const initializeValue = (maybeTrackable: any, parent: Trackable<any>) => {
+export const initializeValue = <V>(maybeTrackable: V, parent: Trackable<any>): V => {
   if (isTrackable(maybeTrackable)) {
-    if ((maybeTrackable as Trackable<any>).$trackable.isChanged) {
-      maybeTrackable = maybeTrackable.clone()
+    if ((maybeTrackable as any as Trackable<any>).$trackable.isChanged) {
+      maybeTrackable = (maybeTrackable as any as Trackable<any>).clone()
     }
-    (maybeTrackable as Trackable<any>).setParent(parent)
+    (maybeTrackable as any as Trackable<any>).setParent(parent)
   }
   return maybeTrackable
 }
