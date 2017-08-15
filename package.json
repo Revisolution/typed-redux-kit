@@ -1,6 +1,6 @@
 {
   "name": "typed-redux-kit",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "main": "node-build/lib/index.js",
   "types": "typings/lib/index.d.js",
   "module": "build/lib/index.js",
