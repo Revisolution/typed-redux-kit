@@ -128,6 +128,47 @@ describe('TrackedMap', () => {
     })
   })
 
+  describe('merge', () => {
+    it('merges with key-value object', () => {
+      const tango = new TrackableMap<string, number>([['a', 1]])
+
+      tango.merge({
+        a: 2,
+        b: 3,
+      })
+
+      expect(tango.$trackable.isChanged).toBe(true)
+      expect(tango.get('a')).toBe(2)
+      expect(tango.get('b')).toBe(3)
+    })
+
+    it('merges with entry array', () => {
+      const tango = new TrackableMap<string, number>([['a', 1]])
+
+      tango.merge([
+        ['a', 2],
+        ['b', 3],
+      ])
+
+      expect(tango.$trackable.isChanged).toBe(true)
+      expect(tango.get('a')).toBe(2)
+      expect(tango.get('b')).toBe(3)
+    })
+
+    it('merges with key-value object', () => {
+      const tango = new TrackableMap<string, number>([['a', 1]])
+
+      tango.merge(new Map([
+        ['a', 2],
+        ['b', 3],
+      ]))
+
+      expect(tango.$trackable.isChanged).toBe(true)
+      expect(tango.get('a')).toBe(2)
+      expect(tango.get('b')).toBe(3)
+    })
+  })
+
   describe('clear', () => {
     it('clears all value', () => {
       const tango = new TrackableMap([['a', 1]])

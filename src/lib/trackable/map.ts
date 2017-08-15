@@ -73,6 +73,14 @@ class TrackableMap<K extends string, V> extends Trackable<TrackableMap<K, V>> {
     return this
   }
 
+  public merge (partial: Iterable<[K, V]> | {[key: string]: V}) {
+    const entries = resolveEntryIterable(partial)
+    for (const [key, value] of entries) {
+      this.set(key, value)
+    }
+    return this
+  }
+
   public clear () {
     if (this.internalMap.size > 0) {
       this.internalMap = new Map()

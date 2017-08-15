@@ -105,6 +105,44 @@ describe('TrackableRecord', () => {
     expect(user.name).toBeUndefined()
   })
 
+  describe('merge', () => {
+    it('merges with partial object', () => {
+      const user = UserRecord({
+        name: 'yolo',
+      })
+      const newFamily = FamilyRecord({
+        father: 'Darth Vader',
+      })
+
+      user.merge({
+        name: 'yoloyolo',
+        family: newFamily,
+      })
+
+      expect(user.$trackable.isChanged).toBe(true)
+      expect(user.name).toBe('yoloyolo')
+      expect(user.family).toBe(newFamily)
+    })
+
+    it('merges with partial entry iterator', () => {
+      const user = UserRecord({
+        name: 'yolo',
+      })
+      const newFamily = FamilyRecord({
+        father: 'Darth Vader',
+      })
+
+      user.merge([
+        ['name', 'yoloyolo'],
+        ['family', newFamily],
+      ])
+
+      expect(user.$trackable.isChanged).toBe(true)
+      expect(user.name).toBe('yoloyolo')
+      expect(user.family).toBe(newFamily)
+    })
+  })
+
   describe('clone', () => {
     it('clones nested record too', () => {
       const familyRecord = FamilyRecord({

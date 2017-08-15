@@ -11,15 +11,15 @@ import {
 
 export type TrackableRecord<T> = T & TrackableRecordClass<T>
 export const TrackableRecord = <T extends {}>(defaultValue: T): (object?: Partial<T>) => TrackableRecord<T> => {
-  class Extended extends TrackableRecordClass<T> {
+  class ExtendedTrackableRecord extends TrackableRecordClass<T> {
     public clone (): TrackableRecord<T> {
-      return new Extended(Object.assign({}, defaultValue, this.internalObject)) as TrackableRecord<T>
+      return new ExtendedTrackableRecord(Object.assign({}, defaultValue, this.internalObject)) as TrackableRecord<T>
     }
   }
 
   const keys = Object.keys(defaultValue)
   keys.forEach(key => {
-    Object.defineProperty(Extended.prototype, key, {
+    Object.defineProperty(ExtendedTrackableRecord.prototype, key, {
       set (newValue) {
         this.set(key, newValue)
       },
@@ -30,7 +30,7 @@ export const TrackableRecord = <T extends {}>(defaultValue: T): (object?: Partia
   })
 
   return (object?: Partial<T>) => {
-    const record = new Extended(Object.assign({}, defaultValue, object))
+    const record = new ExtendedTrackableRecord(Object.assign({}, defaultValue, object))
     return record as TrackableRecord<T>
   }
 }
@@ -90,6 +90,14 @@ export class TrackableRecordClass<T> extends Trackable<TrackableRecord<T>> {
   public update <K extends keyof T>(key: K, mutator: (value: T[K]) => T[K]) {
     const value = this.get(key)
     this.set(key, mutator(value))
+    return this
+  }
+
+  public merge <K extends keyof T>(partial: Iterable<[K, T[K]]> | Partial<T>) {
+    const entries = resolveEntryIterable(partial)
+    for (const [key, value] of entries) {
+      this.set(key, value)
+    }
     return this
   }
 
