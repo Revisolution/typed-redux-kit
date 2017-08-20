@@ -221,6 +221,39 @@ describe('TrackedMap', () => {
     })
   })
 
+  describe('map', () => {
+    it('returns remapped map', () => {
+      const tango = new TrackableMap([['a', 1], ['b', 2]])
+
+      const mappedArray = tango.map((value, key) => key + value)
+
+      expect(mappedArray.get('a')).toBe('a1')
+      expect(mappedArray.get('b')).toBe('b2')
+    })
+  })
+
+  describe('mapToArray', () => {
+    it('returns mapped array', () => {
+      const tango = new TrackableMap([['a', 1], ['b', 2]])
+
+      const mappedArray = tango.mapToArray((value, key) => key + value)
+
+      expect(mappedArray[0]).toBe('a1')
+      expect(mappedArray[1]).toBe('b2')
+    })
+  })
+
+  describe('filter', () => {
+    it('returns filtered array', () => {
+      const tango = new TrackableMap([['a', 1], ['b', 2]])
+
+      const mappedArray = tango.filter((value) => value === 1)
+
+      expect(mappedArray.get('a')).toBe(1)
+      expect(mappedArray.get('b')).toBeUndefined()
+    })
+  })
+
   describe('clone', () => {
     it('clones and return clean instance with same value', () => {
       const tango = new TrackableMap()

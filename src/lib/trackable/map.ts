@@ -5,7 +5,8 @@ import {
   initializeValue,
 } from './trackable'
 import {
-  resolveEntryIterable
+  resolveEntryIterable,
+  convertIterableToArray,
 } from './util'
 
 class TrackableMap<K extends string, V> extends Trackable<TrackableMap<K, V>> {
@@ -92,12 +93,52 @@ class TrackableMap<K extends string, V> extends Trackable<TrackableMap<K, V>> {
     return this.internalMap.entries()
   }
 
+  public toEntryArray () {
+    return convertIterableToArray(this.entries())
+  }
+
   public keys () {
     return this.internalMap.keys()
   }
 
+  public toKeyArray () {
+    return convertIterableToArray(this.keys())
+  }
+
   public values () {
     return this.internalMap.values()
+  }
+
+  public toValueArray () {
+    return convertIterableToArray(this.values())
+  }
+
+  public mapToArray <R>(callback: (item: V, index: K) => R): R[] {
+    const array = []
+    for (const [key, value] of this.internalMap.entries()) {
+      array.push(callback(value, key))
+    }
+    return array
+  }
+
+  public map <R>(callback: (item: V, index: K) => R): TrackableMap<K, R> {
+    const newMap: TrackableMap<K, R> = new TrackableMap()
+    for (const [key, value] of this.internalMap.entries()) {
+      newMap.set(key, callback(value, key))
+    }
+    newMap.$trackable.isChanged = false
+    return newMap
+  }
+
+  public filter (callback: (item: V, index: K) => boolean): TrackableMap<K, V> {
+    const newMap: TrackableMap<K, V> = new TrackableMap()
+    for (const [key, value] of this.internalMap.entries()) {
+      if (callback(value, key)) {
+        newMap.set(key, value)
+      }
+    }
+    newMap.$trackable.isChanged = false
+    return newMap
   }
 
   public clone () {

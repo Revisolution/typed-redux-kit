@@ -7,3 +7,11 @@ export const resolveEntryIterable = <T, K extends keyof T>(entryIterableOrObject
     ? (entryIterableOrObject as Iterable<[K, T[K]]>)
     : Object.entries(entryIterableOrObject) as Array<[K, T[K]]>
 }
+
+export const convertIterableToArray = <V>(iterable: Iterable<V>): V[] => {
+  const array = []
+  for (const item of iterable) {
+    array.push(item)
+  }
+  return array
+}
