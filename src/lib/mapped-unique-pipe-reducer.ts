@@ -24,7 +24,7 @@ export class MappedUniquePipeReducer<STATE, ACTION_TYPE = any, ACTION extends Ac
    * Append reducer functions for the given key
    */
   public add = <SETTED_ACTION extends ACTION, SETTED_ACTION_TYPE extends SETTED_ACTION['type'] & ACTION_TYPE>(
-    actionTypeOrActionTypes: SETTED_ACTION_TYPE | SETTED_ACTION_TYPE[],
+    actionTypeOrActionTypes: SETTED_ACTION_TYPE | SETTED_ACTION_TYPE[] | {[key: number]: SETTED_ACTION_TYPE} | {[key: string]: SETTED_ACTION_TYPE},
     reducerOrReducers: Reducer<STATE, SETTED_ACTION> | ReducerArray<STATE, SETTED_ACTION>
   ) => {
     const actionTypes: SETTED_ACTION_TYPE[] = getActionTypes(actionTypeOrActionTypes)
@@ -46,7 +46,7 @@ export class MappedUniquePipeReducer<STATE, ACTION_TYPE = any, ACTION extends Ac
    * Replace reducer functions for the given key
    */
   public set = <SETTED_ACTION extends ACTION, SETTED_ACTION_TYPE extends SETTED_ACTION['type'] & ACTION_TYPE>(
-    actionTypeOrActionTypes: SETTED_ACTION_TYPE | SETTED_ACTION_TYPE[],
+    actionTypeOrActionTypes: SETTED_ACTION_TYPE | SETTED_ACTION_TYPE[] | {[key: number]: SETTED_ACTION_TYPE} | {[key: string]: SETTED_ACTION_TYPE},
     reducerOrReducers: Reducer<STATE, SETTED_ACTION> | ReducerArray<STATE, SETTED_ACTION>
   ) => {
     const actionTypes: SETTED_ACTION_TYPE[] = getActionTypes(actionTypeOrActionTypes)

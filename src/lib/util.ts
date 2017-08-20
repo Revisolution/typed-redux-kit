@@ -23,7 +23,7 @@ export function isPlainObject (value: any) {
   return proto === Object.prototype || proto === null
 }
 
-export function getActionTypes <SETTED_ACTION_TYPE>(actionTypeOrActionTypes: SETTED_ACTION_TYPE | SETTED_ACTION_TYPE[] | {[key: number]: SETTED_ACTION_TYPE} | {[key: string]: SETTED_ACTION_TYPE}): SETTED_ACTION_TYPE[] {
+export function getActionTypes <ACTION_TYPE>(actionTypeOrActionTypes: ACTION_TYPE | ACTION_TYPE[] | {[key: number]: ACTION_TYPE} | {[key: string]: ACTION_TYPE}): ACTION_TYPE[] {
   return Array.isArray(actionTypeOrActionTypes)
   ? actionTypeOrActionTypes
   : isPlainObject(actionTypeOrActionTypes)
