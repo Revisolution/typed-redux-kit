@@ -11,8 +11,6 @@
         "--inspect-brk",
         "./node_modules/jest-cli/bin/jest.js",
         "-i",
-        "--env",
-        "./env.js",
         "--no-cache", "--runInBand",  "--config", "jest.json"
         // , "record.spec.js"
         // , "map.spec.js"
