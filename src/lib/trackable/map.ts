@@ -7,7 +7,7 @@ import {
 import {
   resolveEntryIterable,
   convertIterableToArray,
-} from './util'
+} from '../util'
 
 class TrackableMap<K extends string, V> extends Trackable<TrackableMap<K, V>> {
   private internalMap: Map<K, V>

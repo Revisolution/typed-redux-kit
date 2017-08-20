@@ -7,7 +7,7 @@ import {
 import {
   resolveEntryIterable,
   getEntries,
-} from './util'
+} from '../util'
 
 export type TrackableRecord<T> = T & TrackableRecordClass<T>
 export const TrackableRecord = <T extends {}>(defaultValue: T): (object?: Partial<T>) => TrackableRecord<T> => {

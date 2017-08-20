@@ -3,6 +3,7 @@ import {
   MappedReducerOptions,
   Reducer,
 } from './types'
+import { getActionTypes } from './util'
 
 export class MappedReducer<STATE, ACTION_TYPE = any, ACTION extends Action = Action> {
   private initialState: STATE
@@ -14,12 +15,10 @@ export class MappedReducer<STATE, ACTION_TYPE = any, ACTION extends Action = Act
   }
 
   public set = <SETTED_ACTION extends ACTION, SETTED_ACTION_TYPE extends SETTED_ACTION['type'] & ACTION_TYPE>(
-    actionTypeOrActionTypes: SETTED_ACTION_TYPE | SETTED_ACTION_TYPE[],
+    actionTypeOrActionTypes: SETTED_ACTION_TYPE | SETTED_ACTION_TYPE[] | {[key: string]: SETTED_ACTION_TYPE},
     reducer: Reducer<STATE, SETTED_ACTION>
   ) => {
-    const actionTypes: SETTED_ACTION_TYPE[] = Array.isArray(actionTypeOrActionTypes)
-      ? actionTypeOrActionTypes
-      : [actionTypeOrActionTypes]
+    const actionTypes: SETTED_ACTION_TYPE[] = getActionTypes(actionTypeOrActionTypes)
     actionTypes.forEach((actionType) => {
       this.reducerMap.set(actionType, reducer)
     })

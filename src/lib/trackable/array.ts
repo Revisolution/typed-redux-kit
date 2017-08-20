@@ -6,7 +6,7 @@ import {
 } from './trackable'
 import {
   getEntries
-} from './util'
+} from '../util'
 
 let OBSERVABLE_ARRAY_BUFFER_SIZE = 0
 

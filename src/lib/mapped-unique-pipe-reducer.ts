@@ -3,6 +3,7 @@ import {
   MappedReducerOptions,
   Reducer,
 } from './types'
+import { getActionTypes } from './util'
 
 type ReducerArray<STATE, ACTION> = Reducer<STATE, ACTION>[]
 type ReducerSet<STATE, ACTION> = Set<Reducer<STATE, ACTION>>
@@ -26,9 +27,7 @@ export class MappedUniquePipeReducer<STATE, ACTION_TYPE = any, ACTION extends Ac
     actionTypeOrActionTypes: SETTED_ACTION_TYPE | SETTED_ACTION_TYPE[],
     reducerOrReducers: Reducer<STATE, SETTED_ACTION> | ReducerArray<STATE, SETTED_ACTION>
   ) => {
-    const actionTypes: SETTED_ACTION_TYPE[] = Array.isArray(actionTypeOrActionTypes)
-      ? actionTypeOrActionTypes
-      : [actionTypeOrActionTypes]
+    const actionTypes: SETTED_ACTION_TYPE[] = getActionTypes(actionTypeOrActionTypes)
     const reducers: ReducerArray<STATE, SETTED_ACTION> = Array.isArray(reducerOrReducers)
       ? reducerOrReducers
       : [reducerOrReducers]
@@ -50,9 +49,7 @@ export class MappedUniquePipeReducer<STATE, ACTION_TYPE = any, ACTION extends Ac
     actionTypeOrActionTypes: SETTED_ACTION_TYPE | SETTED_ACTION_TYPE[],
     reducerOrReducers: Reducer<STATE, SETTED_ACTION> | ReducerArray<STATE, SETTED_ACTION>
   ) => {
-    const actionTypes: SETTED_ACTION_TYPE[] = Array.isArray(actionTypeOrActionTypes)
-      ? actionTypeOrActionTypes
-      : [actionTypeOrActionTypes]
+    const actionTypes: SETTED_ACTION_TYPE[] = getActionTypes(actionTypeOrActionTypes)
     const reducers: ReducerArray<STATE, SETTED_ACTION> = Array.isArray(reducerOrReducers)
       ? reducerOrReducers
       : [reducerOrReducers]
