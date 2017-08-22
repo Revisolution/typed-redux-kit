@@ -5,6 +5,7 @@ export interface TrackableProperties {
 }
 
 export const isTrackable = (maybeTrackable: any): boolean => {
+  if (maybeTrackable == null) return false
   return !!(maybeTrackable as Trackable<any>).$trackable
 }
 
