@@ -164,7 +164,7 @@ export class TrackableArrayClass<V> extends Trackable<TrackableArrayClass<V>> {
   public concat (...arrays: Array<TrackableArray<V>>) {
     return this.internalArray.concat(...arrays.map((array) => array.$trackable
       ? array.slice()
-      : array
+      : array,
     ))
   }
 
