@@ -1,9 +1,9 @@
 {
   "name": "typed-redux-kit.batch-enhancer",
   "version": "1.0.0-alpha",
-  "main": "node-build/lib/index.js",
-  "types": "typings/lib/index.d.js",
-  "module": "build/lib/index.js",
+  "main": "node-build/index.js",
+  "types": "typings/index.d.js",
+  "module": "build/index.js",
   "author": "Junyoung Choi <fluke8259@gmail.com> (https://github.com/Rokt33r/)",
   "contributors": [
     "Stuart Schechter (https://github.com/UppaJung/)"
