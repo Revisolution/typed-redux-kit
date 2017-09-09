@@ -30,7 +30,7 @@ test('batch', () => {
     middlewareEnhancer,
     batchEnhancer(sagaMiddleware),
   )
-  // const sagaMiddleware = createSagaMiddleware<State>()
+  // const sagaMiddleware = createSagaMiddleware()
   // const middlewareEnhancer: Redux.StoreEnhancer<State> = applyMiddleware(sampleMiddleware)
   // const enhancer = compose(
   //   middlewareEnhancer,

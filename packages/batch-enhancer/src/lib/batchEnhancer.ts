@@ -31,10 +31,12 @@ const batchable = <S, A extends Redux.Action>(reducer: (state: S, action: A | Ba
   }
 }
 
-export const batchEnhancer = (sagaMiddleware: ReduxSaga.SagaMiddleware<any>): Redux.GenericStoreEnhancer => <S>(createStore: Redux.StoreEnhancerStoreCreator<S>): Redux.StoreEnhancerStoreCreator<S> => (reducer, preloadedState) => {
+export const batchEnhancer = (sagaMiddleware?: ReduxSaga.SagaMiddleware<any>): Redux.GenericStoreEnhancer => <S>(createStore: Redux.StoreEnhancerStoreCreator<S>): Redux.StoreEnhancerStoreCreator<S> => (reducer, preloadedState) => {
   const store = createStore(batchable(reducer), preloadedState)
 
-  let sagaDispatcher: Redux.Dispatch<S>
+  let sagaDispatcher: Redux.Dispatch<S> = () => {
+    return
+  }
 
   const batchDispatcher: Redux.Dispatch<any> = <A extends Redux.Action>(actionOrActions: A | A[]) => {
     let action: Redux.Action
@@ -51,14 +53,13 @@ export const batchEnhancer = (sagaMiddleware: ReduxSaga.SagaMiddleware<any>): Re
     return store.dispatch(action)
   }
 
-  // Give fake dispatcher to saga
-  // Now this dispatch just emitting action to saga
-  // Batch Dispatcher will choose how to emit action for saga
-  sagaDispatcher = sagaMiddleware({
-    getState: store.getState,
-    // This dispatcher will be used by saga
-    dispatch: batchDispatcher,
-  })((a: Redux.Action) => a)
+  if (sagaMiddleware) {
+    sagaDispatcher = sagaMiddleware({
+      getState: store.getState,
+      // This dispatcher will be used by `put` effect of saga
+      dispatch: batchDispatcher,
+    })((a: Redux.Action) => a)
+  }
 
   // Replace dispatch with our one
   return {
