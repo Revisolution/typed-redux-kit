@@ -108,11 +108,11 @@ It takes a single action type and array/string enum of action types.
 
 #### `#delete(actionTypes: Action | Action[]): this`
 
-Delete a subreducer for an action type.
+Delete a subreducer for the given action type(s).
 
 #### `#get(actionType): Reducer`
 
-Get a subreducer for an action type.
+Get a subreducer for the given action type(s).
 
 #### `#reduce(state: State, action: Action): State`
 
@@ -136,11 +136,11 @@ const masterReducer = combineReducers({
 
 ### `MappedPipeReducer({initialState?: State})`
 
-MappedPipeReducer can have multiple sub reducers for a single action type.
+MappedPipeReducer can have multiple sub reducers for the given action type(s).
 
 #### `#unshift(actionTypes: Action | Action[], reducerOrReducers: Reducer | Reducer[])`
 
-Prepend a subreducer to subreducer array of an action type.
+Prepend a subreducer to subreducer array of the given action type(s).
 
 ### `#prepend(actionTypes: Action | Action[], reducerOrReducers: Reducer | Reducer[])`
 
@@ -148,7 +148,7 @@ Alias of `#unshift`
 
 #### `#push(actionTypes: Action | Action[], reducerOrReducers: Reducer | Reducer[])`
 
-Append a subreducer to subreducer array of an action type.
+Append a subreducer to subreducer array of the given action type(s).
 
 ### `#append(actionTypes: Action | Action[], reducerOrReducers: Reducer | Reducer[])`
 
@@ -156,11 +156,11 @@ Alias of `#push`
 
 #### `#set(actionTypes: Action | Action[], reducerOrReducers: Reducer | Reducer[])`
 
-Replace subreducer array of an action type.
+Replace subreducer array of the given action type(s).
 
 #### `#delete(actionTypes: Action | Action[]): this`
 
-Delete all subreducers registered to an action type.
+Delete all subreducers registered to the given action type(s).
 
 #### `#get(actionType: Action)`
 

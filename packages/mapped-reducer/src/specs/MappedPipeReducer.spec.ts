@@ -1,132 +1,184 @@
 import { createStore } from 'redux'
 import {
-  createActionCreator,
-  PayloadAction,
-  PureAction,
-} from 'typed-redux-kit.base'
-import {
   MappedPipeReducer,
   Reducer,
-} from '..'
+} from '../lib'
 
-enum ActionTypes {
-  Plus = 'test_Plus',
-  Set = 'test_Set',
-}
+describe('MappedPipeReducer', () => {
+  describe('set', () => {
+    it('sets a reducer', () => {
+      // Given
+      const reducer = new MappedPipeReducer()
+      const ActionType = 'random action'
+      const subReducer = <S>(state: S) => state
 
-namespace Actions {
-  export interface PlusAction extends PureAction<ActionTypes.Plus> {}
-  export interface SetAction extends PayloadAction<ActionTypes.Set, {
-    count: number
-  }> {}
-}
+      // When
+      reducer
+        .set(ActionType, subReducer)
 
-type Action = Actions.PlusAction | Actions.SetAction
+      // Then
+      expect(reducer.get(ActionType)).toEqual([subReducer])
+    })
 
-const ActionCreators = {
-  plus: createActionCreator<Actions.PlusAction>(ActionTypes.Plus),
-  set: createActionCreator<Actions.SetAction>(ActionTypes.Set),
-}
+    it('sets reducers', () => {
+      // Given
+      const reducer = new MappedPipeReducer()
+      const ActionType = 'random action'
+      const subReducer = <S>(state: S) => state
+      const subReducer2 = <S>(state: S) => state
 
-interface State {
-  count: number
-  dispatchCount: number
-}
+      // When
+      reducer
+        .set(ActionType, [subReducer, subReducer2])
 
-const initialState: State = {
-  count: 0,
-  dispatchCount: 0,
-}
+      // Then
+      expect(reducer.get(ActionType)).toEqual([subReducer, subReducer2])
+    })
 
-const plusSubReducer = (state: State, action: Actions.PlusAction) => ({
-  ...state,
-  count: state.count + 1,
-})
+    it('replace reducer', () => {
+      // Given
+      const reducer = new MappedPipeReducer()
+      const ActionType = 'random action'
+      const subReducer = <S>(state: S) => state
+      const subReducer2 = <S>(state: S) => state
+      reducer
+        .set(ActionType, subReducer)
 
-const setSubReducer: Reducer<State, Actions.SetAction> = (state, action) => ({
-  ...state,
-  ...action.payload,
-})
+      // When
+      reducer
+      .set(ActionType, subReducer2)
 
-// This reducer will be used when dispatching both actions, PlusAction and SetAction
-const masterReducer: Reducer<State, Action> = (state, action) => ({
-  ...state,
-  dispatchCount: state.dispatchCount + 1,
-})
-
-// As we said in `./mapped-reducer.spec.ts`, we could give only State type.
-const reducer = new MappedPipeReducer<State>()
-
-reducer
-  .set(ActionTypes.Plus, plusSubReducer)
-  .set(ActionTypes.Set, setSubReducer)
-  // reducer#add appends reducer to the previous rather than replacing
-  .push([
-    ActionTypes.Plus,
-    ActionTypes.Set,
-  ], masterReducer)
-
-const store = createStore(reducer.reduce, initialState)
-
-test('MappedPipeReducer', () => {
-  // As you see, our reducers are set as an Array
-  expect(reducer.get(ActionTypes.Plus)).toEqual([
-    plusSubReducer,
-    masterReducer,
-  ])
-
-  const plusAction = ActionCreators.plus()
-  store.dispatch(plusAction)
-
-  const firstReducedState = store.getState()
-  expect(firstReducedState).toEqual({
-    count: 1,
-    dispatchCount: 1,
+      // Then
+      expect(reducer.get(ActionType)).toEqual([subReducer2])
+    })
   })
 
-  const setAction = ActionCreators.set({
-    count: 0,
+  describe('prepend', () => {
+    it('prepend a reducer', () => {
+      // Given
+      const reducer = new MappedPipeReducer()
+      const ActionType = 'random action'
+      const subReducer = <S>(state: S) => state
+      const subReducer2 = <S>(state: S) => state
+      reducer
+        .set(ActionType, subReducer)
+
+      // When
+      reducer
+        .prepend(ActionType, subReducer2)
+
+      // Then
+      expect(reducer.get(ActionType)).toEqual([subReducer2, subReducer])
+    })
+
+    it('prepend reducers', () => {
+      // Given
+      const reducer = new MappedPipeReducer()
+      const ActionType = 'random action'
+      const subReducer = <S>(state: S) => state
+      const subReducer2 = <S>(state: S) => state
+      const subReducer3 = <S>(state: S) => state
+      reducer
+        .set(ActionType, subReducer)
+
+      // When
+      reducer
+        .prepend(ActionType, [subReducer2, subReducer3])
+
+      // Then
+      expect(reducer.get(ActionType)).toEqual([subReducer2, subReducer3, subReducer])
+    })
   })
-  store.dispatch(setAction)
 
-  const secondReducedState = store.getState()
-  expect(secondReducedState).toEqual({
-    count: 0,
-    dispatchCount: 2,
+  describe('append', () => {
+    it('append a reducer', () => {
+      // Given
+      const reducer = new MappedPipeReducer()
+      const ActionType = 'random action'
+      const subReducer = <S>(state: S) => state
+      const subReducer2 = <S>(state: S) => state
+      reducer
+        .set(ActionType, subReducer)
+
+      // When
+      reducer
+        .append(ActionType, subReducer2)
+
+      // Then
+      expect(reducer.get(ActionType)).toEqual([subReducer, subReducer2])
+    })
+
+    it('append reducers', () => {
+      // Given
+      const reducer = new MappedPipeReducer()
+      const ActionType = 'random action'
+      const subReducer = <S>(state: S) => state
+      const subReducer2 = <S>(state: S) => state
+      const subReducer3 = <S>(state: S) => state
+      reducer
+        .set(ActionType, subReducer)
+
+      // When
+      reducer
+        .append(ActionType, [subReducer2, subReducer3])
+
+      // Then
+      expect(reducer.get(ActionType)).toEqual([subReducer, subReducer2, subReducer3])
+    })
   })
 
-  // Append plusSubReducer again
-  reducer.push(ActionTypes.Plus, plusSubReducer)
-  store.dispatch(plusAction)
+  describe('delete', () => {
+    it('deletes reducer', () => {
+      // Given
+      const reducer = new MappedPipeReducer()
+      const ActionType = 'random action'
+      const subReducer = <S>(state: S) => state
+      reducer
+        .set(ActionType, subReducer)
 
-  // Now it reduces plusSubReducer twice
-  const thirdReducedState = store.getState()
-  expect(thirdReducedState).toEqual({
-    count: 2,
-    dispatchCount: 3,
+      // When
+      reducer
+        .delete(ActionType)
+
+      // Then
+      expect(reducer.get(ActionType)).toBeUndefined()
+    })
   })
 
-  // Reset reducer for ActionTypes.Plus
-  reducer.set(ActionTypes.Plus, [plusSubReducer, masterReducer])
-  store.dispatch(plusAction)
+  describe('reduce', () => {
+    it('reduces', () => {
+      // Given
+      interface State {
+        count: 0,
+      }
+      const initialState: State = {
+        count: 0,
+      }
+      const reducer = new MappedPipeReducer<State>()
+      const ActionType = 'random action'
+      const setReducer = (state: State, action: {
+        type: typeof ActionType
+        payload: number
+      }) => ({
+        ...state,
+        count: action.payload,
+      } as State)
+      const multiflyReducer = (state: State) => ({
+        ...state,
+        count: state.count * 2,
+      } as State)
+      reducer
+        .set(ActionType, [setReducer, multiflyReducer])
 
-  // Now it reduces only once
-  const forthReducedState = store.getState()
-  expect(forthReducedState).toEqual({
-    count: 3,
-    dispatchCount: 4,
-  })
+      // When
+      const newState = reducer.reduce(initialState, {
+        type: ActionType,
+        payload: 1,
+      } as Redux.Action)
 
-  /**
-   * Delete
-   */
-  reducer.delete(ActionTypes.Plus)
-  store.dispatch(plusAction)
-
-  // Now it reduces only once
-  const fifthReducedState = store.getState()
-  expect(fifthReducedState).toEqual({
-    count: 3,
-    dispatchCount: 4,
+      // Then
+      // Set count to 1 and multify by 2 = 2
+      expect(newState.count).toBe(2)
+    })
   })
 })

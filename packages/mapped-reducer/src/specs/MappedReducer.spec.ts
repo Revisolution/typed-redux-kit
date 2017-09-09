@@ -1,241 +1,88 @@
-import { combineReducers, createStore } from 'redux'
-import {
-  createActionCreator,
-  PayloadAction,
-  PureAction,
-} from 'typed-redux-kit.base'
+import { createStore } from 'redux'
 import {
   MappedReducer,
   Reducer,
-} from '..'
+} from '../lib'
 
-enum ActionTypes {
-  Plus = 'test_Plus',
-  Set = 'test_Set',
-  SayHello = 'test_SayHello',
-  SayBye = 'test_SayBye',
-}
+describe('MappedReducer', () => {
+  describe('set', () => {
+    it('sets a reducer', () => {
+      // Given
+      const reducer = new MappedReducer()
+      const ActionType = 'random action'
+      const subReducer = <S>(state: S) => state
 
-namespace Actions {
-  export interface PlusAction extends PureAction<ActionTypes.Plus> {}
-  export interface SetAction extends PayloadAction<ActionTypes.Set, {
-    count: number
-  }> {}
-  export interface SayHelloAction extends PureAction<ActionTypes.SayHello> {}
-  export interface SayByeAction extends PureAction<ActionTypes.SayBye> {}
+      // When
+      reducer
+        .set(ActionType, subReducer)
 
-  export type Say =
-    Actions.SayHelloAction |
-    Actions.SayByeAction
-}
+      // Then
+      expect(reducer.get(ActionType)).toEqual(subReducer)
+    })
 
-const ActionCreators = {
-  plus: createActionCreator<Actions.PlusAction>(ActionTypes.Plus),
-  set: createActionCreator<Actions.SetAction>(ActionTypes.Set),
-  sayHello: createActionCreator<Actions.SayHelloAction>(ActionTypes.SayHello),
-  sayBye: createActionCreator<Actions.SayByeAction>(ActionTypes.SayBye),
-}
+    it('deletes a reducer', () => {
+      // Given
+      const reducer = new MappedReducer()
+      const ActionType = 'random action'
+      const subReducer = <S>(state: S) => state
+      reducer
+        .set(ActionType, subReducer)
 
-interface State {
-  count: number
-  message: string
-}
+      // When
+      reducer
+        .delete(ActionType)
 
-interface ModuleState {
-  myModule: State
-}
+      // Then
+      expect(reducer.get(ActionType)).toBeUndefined()
+    })
 
-const initialState: State = {
-  count: 0,
-  message: 'No message!',
-}
+    it('replace reducer', () => {
+      // Given
+      const reducer = new MappedReducer()
+      const ActionType = 'random action'
+      const subReducer = <S>(state: S) => state
+      const subReducer2 = <S>(state: S) => state
+      reducer
+        .set(ActionType, subReducer)
 
-// You needed to set types for arguments of reducer function
-const plusSubReducer = (state: State, action: Actions.PlusAction) => ({
-  ...state,
-  count: state.count + 1,
-})
+      // When
+      reducer
+      .set(ActionType, subReducer2)
 
-// You can also use `Reducer<STATE, ACTION>` interface
-const setSubReducer = (state: State, action: Actions.SetAction) => ({
-  ...state,
-  ...action.payload,
-})
-
-// Also, you can set multiple actions(union)
-const sayReducer = (state: State, action: Actions.Say) => ({
-  ...state,
-  message: action.type === ActionTypes.SayHello
-    ? 'Hello!'
-    : 'Bye!',
-})
-
-// Dummy Action and Reducer to cause Type error
-interface RandomAction {
-  type: 'UNWELCOMMED'
-  payload: {
-    message: string
-  }
-}
-const randomReducer: Reducer<State, RandomAction> = (state, action) => state
-
-/**
- * ActionTypes is optional
- * But, we can use it to prevent from setting wrong actions
- */
-const reducer = new MappedReducer<State, ActionTypes>()
-
-// When using this in a redux module structure all you need to do is pass the initial state as opts.initialState
-const moduleReducer = new MappedReducer<State, ActionTypes>({ initialState })
-
-// reducer#set is chainable
-reducer
-  .set(ActionTypes.Plus, plusSubReducer)
-  .set(ActionTypes.Set, setSubReducer)
-  .set([
-    ActionTypes.SayHello,
-    ActionTypes.SayBye,
-  ], sayReducer)
-
-// Usage with redux module setup is the same
-moduleReducer
-  .set(ActionTypes.Plus, plusSubReducer)
-  .set(ActionTypes.Set, setSubReducer)
-  .set([
-    ActionTypes.SayHello,
-    ActionTypes.SayBye,
-  ], sayReducer)
-
-  /**
-   * The below usages of `reducer#set` are intended to cause Type errors
-   */
-
-  // Wrong ActionType and Sub Reducer combination
-  // .set(ActionTypes.Set, plusSubReducer)
-  // .set(ActionTypes.Plus, setSubReducer)
-
-  // Invalid Action Types
-  // .set([
-  //   'UNWELCOMMED'
-  // ], sayReducer)
-  // .set('UNWELCOMMED', sayReducer)
-  // .set(ActionTypes.SayHello, randomReducer)
-
-const store = createStore(reducer.reduce, initialState)
-const moduleStore = createStore(combineReducers<ModuleState>({
-  myModule: moduleReducer.reduce,
-}))
-
-test('MappedReducer', () => {
-  // Check if the reducer is set properly
-  expect(reducer.get(ActionTypes.Plus)).toEqual(plusSubReducer)
-  expect(moduleReducer.get(ActionTypes.Plus)).toEqual(plusSubReducer)
-
-  /**
-   * 1. Plus action
-   */
-  const plusAction = ActionCreators.plus()
-  store.dispatch(plusAction)
-  moduleStore.dispatch(plusAction)
-
-  // Default store
-  const firstReducedState = store.getState()
-  expect(firstReducedState).toEqual({
-    count: 1,
-    message: 'No message!',
+      // Then
+      expect(reducer.get(ActionType)).toEqual(subReducer2)
+    })
   })
 
-  // Module store
-  const firstReducedModuleState = moduleStore.getState()
-  expect(firstReducedModuleState).toEqual({
-    myModule: {
-      count: 1,
-      message: 'No message!',
-    },
-  })
+  describe('reduce', () => {
+    it('reduces', () => {
+      // Given
+      interface State {
+        count: 0,
+      }
+      const initialState: State = {
+        count: 0,
+      }
+      const reducer = new MappedReducer<State>()
+      const ActionType = 'random action'
+      const setReducer = (state: State, action: {
+        type: typeof ActionType
+        payload: number
+      }) => ({
+        ...state,
+        count: action.payload,
+      } as State)
+      reducer
+        .set(ActionType, setReducer)
 
-  /**
-   * 2. Set action
-   */
-  const setAction = ActionCreators.set({
-    count: 0,
-  })
-  store.dispatch(setAction)
-  moduleStore.dispatch(setAction)
+      // When
+      const newState = reducer.reduce(initialState, {
+        type: ActionType,
+        payload: 1,
+      } as Redux.Action)
 
-  // default store
-  const secondReducedState = store.getState()
-  expect(secondReducedState).toEqual({
-    count: 0,
-    message: 'No message!',
-  })
-
-  // module store
-  const secondReducedModuleState = moduleStore.getState()
-  expect(secondReducedModuleState).toEqual({
-    myModule: {
-      count: 0,
-      message: 'No message!',
-    },
-  })
-
-  /**
-   * 3. Say hello action
-   */
-  const sayHelloAction = ActionCreators.sayHello()
-  store.dispatch(sayHelloAction)
-  moduleStore.dispatch(sayHelloAction)
-
-  // Default store
-  const thirdReducedState = store.getState()
-  expect(thirdReducedState).toEqual({
-    count: 0,
-    message: 'Hello!',
-  })
-
-  // Module store
-  const thirdReducedModuleState = moduleStore.getState()
-  expect(thirdReducedModuleState).toEqual({
-    myModule: {
-      count: 0,
-      message: 'Hello!',
-    },
-  })
-
-  /**
-   * 4. Say bye action
-   */
-  const sayByeAction = ActionCreators.sayBye()
-  store.dispatch(sayByeAction)
-  moduleStore.dispatch(sayByeAction)
-
-  // default store
-  const forthReducedState = store.getState()
-  expect(forthReducedState).toEqual({
-    count: 0,
-    message: 'Bye!',
-  })
-
-  // module store
-  const forthReducedModuleState = moduleStore.getState()
-  expect(forthReducedModuleState).toEqual({
-    myModule: {
-      count: 0,
-      message: 'Bye!',
-    },
-  })
-
-  /**
-   * Delete
-   */
-  reducer.delete(ActionTypes.SayHello)
-
-  store.dispatch(sayHelloAction)
-
-  // default store
-  const fifthReducedState = store.getState()
-  expect(fifthReducedState).toEqual({
-    count: 0,
-    message: 'Bye!',
+      // Then
+      expect(newState.count).toBe(1)
+    })
   })
 })

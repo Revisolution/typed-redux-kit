@@ -6,6 +6,7 @@ import {
 import { getActionTypes } from './util'
 
 type ReducerArray<STATE, ACTION> = Reducer<STATE, ACTION>[]
+
 export class MappedPipeReducer<STATE, ACTION_TYPE = any, ACTION extends Action = Action> {
   private initialState: STATE
 

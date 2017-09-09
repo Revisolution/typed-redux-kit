@@ -1,4 +1,4 @@
-import * as Util from '../util'
+import * as Util from '../lib/util'
 
 describe('Util.getActionTypes', () => {
   it('gets an action from string', () => {
