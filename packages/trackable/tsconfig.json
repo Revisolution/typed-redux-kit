@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "es6",
+    "allowJs": false,
+    "jsx": "preserve",
+    "baseUrl": "./src",
+    "outDir": "build",
+    "moduleResolution": "node",
+    "inlineSourceMap": true,
+    "noImplicitAny": true,
+    "plugins": [
+			{
+        "name": "tslint-language-service",
+        "ignoreDefinitionFiles": true
+      }
+    ]
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

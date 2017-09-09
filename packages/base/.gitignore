@@ -1,0 +1,7 @@
+# Compiled Legacy
+/build
+/node-build
+/typings
+
+# Dependencies
+/node_modules

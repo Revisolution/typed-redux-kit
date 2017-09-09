@@ -13,9 +13,7 @@
     "array-type": [false],
     "max-classes-per-file": [false],
     "no-empty-interface": false,
-    "ordered-imports": [
-      false
-    ],
+    "ordered-imports": false,
     "arrow-parens": false,
     "space-before-function-paren": false,
     "callable-types": false,

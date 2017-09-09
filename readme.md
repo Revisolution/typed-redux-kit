@@ -64,7 +64,6 @@ const reducer = new MappedReducer<State, ActionTypes>()
   // because our reducer is smart enough.
   //
   // Wrong ActionType and Sub Reducer combination
-  //
   // .set(ActionTypes.Set, plusSubReducer)
   // .set(ActionTypes.Plus, setSubReducer)
   //
@@ -110,10 +109,12 @@ Please check `specs/*.spec.ts`! We've already prepared tons of comments there!
 1. [Basic usage & MappedReducer](./src/specs/mapped-reducer.spec.ts)
 2. [MappedPipeReducer](./src/specs/mapped-pipe-reducer.spec.ts)
 3. [MappedUniquePipeReducer](./src/specs/mapped-unique-pipe-reducer.spec.ts)
+4. [Batch Enhancer](./src/specs/batch-enhancer.ts)
+5. [Trackable](./src/specs/trackable/track-enhancer.spec.ts)
 
 ## Author & Maintainer
 
-- [Stuart Schechter](https://github.com/UppaJung) : Author (He made most concepts of this library)
+- [Stuart Schechter](https://github.com/UppaJung) : Author
 - [Junyoung Choi](https://github.com/rokt33r) : Author & Maintainer
 
 ## License & Copyright
