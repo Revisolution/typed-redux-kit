@@ -49,9 +49,9 @@
     "redux": "^3.0.0"
   },
   "files": [
-    "build/*",
-    "node-build/*",
-    "typings/*",
-    "src/*"
+    "build/lib/*",
+    "node-build/lib/*",
+    "typings/lib/*",
+    "src/lib/*"
   ]
 }

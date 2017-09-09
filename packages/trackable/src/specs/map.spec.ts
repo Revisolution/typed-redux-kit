@@ -1,4 +1,4 @@
-import TrackableMap from '../map'
+import { TrackableMap } from '../lib'
 
 describe('TrackedMap', () => {
   describe('constructor', () => {

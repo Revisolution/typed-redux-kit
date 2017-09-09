@@ -1,7 +1,7 @@
 import {
   TrackableRecord,
   TrackableMap,
-} from '..'
+} from '../lib'
 
 describe('TrackableRecord', () => {
   const FamilyRecord = TrackableRecord({

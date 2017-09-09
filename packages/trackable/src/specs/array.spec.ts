@@ -1,4 +1,4 @@
-import TrackableArray from '../array'
+import { TrackableArray } from '../lib'
 
 describe('TrackableArray', () => {
   describe('constructor', () => {
