@@ -2,7 +2,7 @@ import {
   createActionCreator,
   PayloadAction,
   PureAction,
-} from '..'
+} from '../lib'
 
 enum ActionTypes {
   Plus = 'Plus',
