@@ -2,7 +2,7 @@ import { createStore, Action, StoreCreator, Store, StoreEnhancer, compose, apply
 import * as Redux from 'redux'
 import createSagaMiddleware, {SagaMiddleware} from 'redux-saga'
 import { fork, take, put } from 'redux-saga/effects'
-import { batchEnhancer } from '..'
+import batchEnhancer from '../lib'
 
 const sampleMiddleware: Redux.Middleware = () => next => (action: Redux.Action) => {
   return next(action)
