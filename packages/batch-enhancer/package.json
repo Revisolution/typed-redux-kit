@@ -51,9 +51,9 @@
     "redux-saga": "^0.15.6"
   },
   "files": [
-    "build/lib/*",
-    "node-build/lib/*",
-    "typings/lib/*",
-    "src/lib/*"
+    "build/*",
+    "node-build/*",
+    "typings/*",
+    "src/*"
   ]
 }
