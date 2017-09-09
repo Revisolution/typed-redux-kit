@@ -3,7 +3,9 @@ import {
   createActionCreator,
   PayloadAction,
   PureAction,
-  MappedReducer,
+} from 'typed-redux-kit.base'
+import {
+  MappedPipeReducer,
   Reducer,
 } from '..'
 
