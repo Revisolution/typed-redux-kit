@@ -61,7 +61,7 @@ reducer
   .set(ActionTypes.Plus, plusSubReducer)
   .set(ActionTypes.Set, setSubReducer)
   // reducer#add appends reducer to the previous rather than replacing
-  .add([
+  .push([
     ActionTypes.Plus,
     ActionTypes.Set,
   ], masterReducer)
@@ -96,7 +96,7 @@ test('MappedPipeReducer', () => {
   })
 
   // Append plusSubReducer again
-  reducer.add(ActionTypes.Plus, plusSubReducer)
+  reducer.push(ActionTypes.Plus, plusSubReducer)
   store.dispatch(plusAction)
 
   // Now it reduces plusSubReducer twice
@@ -113,6 +113,19 @@ test('MappedPipeReducer', () => {
   // Now it reduces only once
   const forthReducedState = store.getState()
   expect(forthReducedState).toEqual({
+    count: 3,
+    dispatchCount: 4,
+  })
+
+  /**
+   * Delete
+   */
+  reducer.delete(ActionTypes.Plus)
+  store.dispatch(plusAction)
+
+  // Now it reduces only once
+  const fifthReducedState = store.getState()
+  expect(fifthReducedState).toEqual({
     count: 3,
     dispatchCount: 4,
   })

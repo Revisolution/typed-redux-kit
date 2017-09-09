@@ -17,44 +17,17 @@ enum ActionTypes {
 }
 
 namespace Actions {
-  // We recommends to use interface rather than type literal to get better error message(Too verbose)
-  // Type Literal:
-  // export type PlusAction = PureAction<ActionTypes.Plus>
   export interface PlusAction extends PureAction<ActionTypes.Plus> {}
-  // But, we use type literal when giving payload. By this way, we can have helpful hint for payload.
   export interface SetAction extends PayloadAction<ActionTypes.Set, {
     count: number
   }> {}
   export interface SayHelloAction extends PureAction<ActionTypes.SayHello> {}
   export interface SayByeAction extends PureAction<ActionTypes.SayBye> {}
 
-  /**
-   * Interface VS Type Literal
-   *
-   * When figure out which action is needed for reducer,
-   * We probably want to see name of Type rather than the structure of PureAction or PayloadAction
-   * => So, if we use interface, we could get the name of interface directly
-   * (e.g. `Actions.SetAction` rather than `PureAction<ActionTypes.Set, {count: number}>`)
-   *
-   * But, when we use actionCreator, we probably want to know which members must be given.
-   * => So, if we use type literal, we could figure out the members we should give easily.
-   * (e.g.
-   * ```
-   * (property) set: (payload: {
-   *   count: number;
-   * }) => Actions.SetAction
-   * ```
-   * Rather than below,
-   * ```
-   * (property) set: (payload: SetPayload) => Actions.SetAction
-   * ```
-   * To know members of SetPayload interface, we have to use `Go to definition`.
-   * )
-   */
+  export type Say =
+    Actions.SayHelloAction |
+    Actions.SayByeAction
 }
-
-type SayAction = Actions.SayHelloAction
-  | Actions.SayByeAction
 
 const ActionCreators = {
   plus: createActionCreator<Actions.PlusAction>(ActionTypes.Plus),
@@ -83,14 +56,14 @@ const plusSubReducer = (state: State, action: Actions.PlusAction) => ({
   count: state.count + 1,
 })
 
-// You can also use `Reducer<STATE, ACTION>` interface (Recommended)
-const setSubReducer: Reducer<State, Actions.SetAction> = (state, action) => ({
+// You can also use `Reducer<STATE, ACTION>` interface
+const setSubReducer = (state: State, action: Actions.SetAction) => ({
   ...state,
   ...action.payload,
 })
 
 // Also, you can set multiple actions(union)
-const sayReducer: Reducer<State, SayAction> = (state, action) => ({
+const sayReducer = (state: State, action: Actions.Say) => ({
   ...state,
   message: action.type === ActionTypes.SayHello
     ? 'Hello!'
@@ -250,5 +223,19 @@ test('MappedReducer', () => {
       count: 0,
       message: 'Bye!',
     },
+  })
+
+  /**
+   * Delete
+   */
+  reducer.delete(ActionTypes.SayHello)
+
+  store.dispatch(sayHelloAction)
+
+  // default store
+  const fifthReducedState = store.getState()
+  expect(fifthReducedState).toEqual({
+    count: 0,
+    message: 'Bye!',
   })
 })

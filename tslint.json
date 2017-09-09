@@ -17,6 +17,7 @@
     "arrow-parens": false,
     "space-before-function-paren": false,
     "callable-types": false,
+    "member-ordering": false,
     "trailing-comma": [
       true,
       {
