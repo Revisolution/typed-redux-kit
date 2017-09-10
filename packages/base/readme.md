@@ -103,10 +103,11 @@ createActionCreator<Actions.PlusAction>(ActionTypes.Plus)
 })
 ```
 
-## Author & Maintainer
+## Authors
 
-- [Stuart Schechter](https://github.com/UppaJung) : Author
-- [Junyoung Choi](https://github.com/rokt33r) : Author & Maintainer
+- [Stuart Schechter](https://github.com/UppaJung)
+- [Junyoung Choi](https://github.com/rokt33r) : Maintainer
+- [Joseph Stein](https://github.com/josephstein)
 
 ## License & Copyright
 
