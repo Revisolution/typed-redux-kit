@@ -1,6 +1,6 @@
 {
   "name": "typed-redux-kit.trackable",
-  "version": "1.0.0-alpha",
+  "version": "1.0.0",
   "main": "node-build/lib/index.js",
   "types": "typings/lib/index.d.js",
   "module": "build/lib/index.js",

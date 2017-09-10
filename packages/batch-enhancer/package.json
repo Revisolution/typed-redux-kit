@@ -1,6 +1,6 @@
 {
   "name": "typed-redux-kit.batch-enhancer",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0",
   "main": "node-build/lib/index.js",
   "types": "typings/lib/index.d.js",
   "module": "build/lib/index.js",
@@ -40,11 +40,11 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "jest": "^20.0.4",
     "redux": "^3.7.0",
+    "redux-saga": "^0.15.6",
     "rimraf": "^2.6.1",
     "source-map-support": "^0.4.15",
     "tslint": "^5.5.0",
-    "typescript": "^2.5.2",
-    "redux-saga": "^0.15.6"
+    "typescript": "^2.5.2"
   },
   "peerDependencies": {
     "redux": "^3.0.0",
