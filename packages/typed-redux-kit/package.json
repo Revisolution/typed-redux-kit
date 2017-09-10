@@ -1,6 +1,6 @@
 {
   "name": "typed-redux-kit",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "node-build/lib/index.js",
   "types": "typings/lib/index.d.js",
   "module": "build/lib/index.js",
@@ -58,9 +58,9 @@
     "src/lib/*"
   ],
   "dependencies": {
-    "typed-redux-kit.base": "^1.0.1",
-    "typed-redux-kit.batch-enhancer": "^1.0.1",
-    "typed-redux-kit.mapped-reducer": "^1.0.1",
-    "typed-redux-kit.trackable": "^1.0.1"
+    "typed-redux-kit.base": "^1.0.2",
+    "typed-redux-kit.batch-enhancer": "^1.0.2",
+    "typed-redux-kit.mapped-reducer": "^1.0.2",
+    "typed-redux-kit.trackable": "^1.0.2"
   }
 }
