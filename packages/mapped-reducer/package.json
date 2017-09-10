@@ -1,6 +1,6 @@
 {
   "name": "typed-redux-kit.mapped-reducer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "node-build/lib/index.js",
   "types": "typings/lib/index.d.js",
   "module": "build/lib/index.js",
@@ -43,7 +43,7 @@
     "rimraf": "^2.6.1",
     "source-map-support": "^0.4.15",
     "tslint": "^5.5.0",
-    "typed-redux-kit.base": "^1.0.0",
+    "typed-redux-kit.base": "^1.0.1",
     "typescript": "^2.5.2"
   },
   "peerDependencies": {
