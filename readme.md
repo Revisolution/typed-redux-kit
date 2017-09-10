@@ -4,116 +4,18 @@ Toolkit for Redux with Typescript
 
 ## What the heck is this?
 
-- Guide for using redux with Typescript
-- Several sweet scaffoldings(createActionCreators, MappedReducer, ...)
+In this package, you can find several neat tricks.
 
-```ts
-import {
-  createActionCreator,
-  MappedReducer,
-  PayloadAction,
-  PureAction,
-  Reducer,
-} from 'typed-redux-kit'
+- [Base](./packages/base) : Basic usage of redux
+- [Mapped Reducer](./packages/mapped-reducer) : Reducer with ES6Map for efficient switching and scalability.
+- [Batch Enhancer](./packages/batch-enhancer) : Allows dispatch array of actions. Also it support redux-saga.
+- [Trackable](./packages/trackable) : Allow mutable change to deal with deep state.
 
-// Prepare actions
-enum ActionTypes {
-  Plus = 'test_Plus',
-  Set = 'test_Set',
-}
-
-namespace Actions {
-  export interface PlusAction extends PureAction<ActionTypes.Plus> {}
-  export interface SetAction extends PayloadAction<ActionTypes.Set, {
-    count: number
-  }> {}
-}
-
-const ActionCreators = {
-  plus: createActionCreator<Actions.PlusAction>(ActionTypes.Plus),
-  set: createActionCreator<Actions.SetAction>(ActionTypes.Set),
-}
-
-// State types and initial state
-interface State {
-  count: number
-}
-
-const initialState: State = {
-  count: 0
-}
-
-// Create reducer just for plus action only
-const plusSubReducer = (state: State, action: Actions.PlusAction) => ({
-  ...state,
-  count: state.count + 1,
-})
-// You also can give the type, we prepared, explicitly
-const setSubReducer: Reducer<State, Actions.SetAction> = (state, action) => ({
-  ...state,
-  ...action.payload,
-})
-
-// Create reducer(with type filter by generic<ActionTypes>)
-const reducer = new MappedReducer<State, ActionTypes>()
-  // Just like switch, but our mapped reducer uses cached references!(Native Map)
-  // So, it should perform better than switch for most cases.
-  .set(ActionTypes.Plus, plusSubReducer)
-  .set(ActionTypes.Set, setSubReducer)
-  // Also, These wrong usage will thorw compiler errors
-  // because our reducer is smart enough.
-  //
-  // Wrong ActionType and Sub Reducer combination
-  //
-  // .set(ActionTypes.Set, plusSubReducer)
-  // .set(ActionTypes.Plus, setSubReducer)
-  //
-  // Invalid Action Types
-  // .set('UNWELCOMMED', plusSubReducer)
-
-  // If you want to use the MappedReducer as part of a module setup, you can just pass it an opts object
-  // with initialState as your initial state.
-  // new MappedReducer<State, ActionTypes>({ initialState })
-
-  // Then intialize your store like a module;
-  // createStore(combineReducers<State>({ count: reducer.reduce }))
-
-// Reducer has a reduce method, `reducer.reduce`. Just pass it to our store!
-const store = createStore(reducer.reduce, initialState)
-
-test('MappedReducer', () => {
-  expect(reducer.get(ActionTypes.Plus)).toEqual(plusSubReducer)
-
-  const plusAction = ActionCreators.plus()
-  store.dispatch(plusAction)
-  const firstReducedState = store.getState()
-  expect(firstReducedState).toEqual({
-    count: 1
-  })
-
-  const setAction = ActionCreators.set({
-    count: 0,
-  })
-  store.dispatch(setAction)
-
-  const secondReducedState = store.getState()
-  expect(secondReducedState).toEqual({
-    count: 0,
-  })
-})
-```
-
-## How to use
-
-Please check `specs/*.spec.ts`! We've already prepared tons of comments there!
-
-1. [Basic usage & MappedReducer](./src/specs/mapped-reducer.spec.ts)
-2. [MappedPipeReducer](./src/specs/mapped-pipe-reducer.spec.ts)
-3. [MappedUniquePipeReducer](./src/specs/mapped-unique-pipe-reducer.spec.ts)
+[basic-usage.spec.ts](./packages/typed-redux-kit/src/specs/basic-usage.spec.ts) presents how to combine all of toolkit.
 
 ## Author & Maintainer
 
-- [Stuart Schechter](https://github.com/UppaJung) : Author (He made most concepts of this library)
+- [Stuart Schechter](https://github.com/UppaJung) : Author
 - [Junyoung Choi](https://github.com/rokt33r) : Author & Maintainer
 
 ## License & Copyright

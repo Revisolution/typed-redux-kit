@@ -1,0 +1,59 @@
+{
+  "name": "typed-redux-kit.batch-enhancer",
+  "version": "1.0.0",
+  "main": "node-build/lib/index.js",
+  "types": "typings/lib/index.d.js",
+  "module": "build/lib/index.js",
+  "author": "Junyoung Choi <fluke8259@gmail.com> (https://github.com/Rokt33r/)",
+  "contributors": [
+    "Stuart Schechter (https://github.com/UppaJung/)"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "npm run clean && npm run build:es && npm run build:node",
+    "build:es": "tsc -p . -d --declarationDir typings",
+    "build:node": "tsc -p . -m commonjs --outDir node-build",
+    "build:watch": "tsc -p . -w",
+    "test": "jest -c jest.json",
+    "test:watch": "jest --watch",
+    "test:quick": "jest",
+    "lint": "tslint -c ../../tslint.json -p ./tsconfig.json",
+    "clean": "rimraf build typings node-build",
+    "prepublishOnly": "npm run lint && npm run build && npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Revisolution/typed-redux-kit.git"
+  },
+  "keywords": [
+    "typescript",
+    "redux"
+  ],
+  "bugs": {
+    "url": "https://github.com/Revisolution/typed-redux-kit/issues"
+  },
+  "homepage": "https://github.com/Revisolution/typed-redux-kit#readme",
+  "devDependencies": {
+    "@types/jest": "^20.0.2",
+    "@types/redux": "^3.6.31",
+    "babel-jest": "^20.0.3",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
+    "jest": "^20.0.4",
+    "redux": "^3.7.0",
+    "redux-saga": "^0.15.6",
+    "rimraf": "^2.6.1",
+    "source-map-support": "^0.4.15",
+    "tslint": "^5.5.0",
+    "typescript": "^2.5.2"
+  },
+  "peerDependencies": {
+    "redux": "^3.0.0",
+    "redux-saga": "^0.15.6"
+  },
+  "files": [
+    "build/lib/*",
+    "node-build/lib/*",
+    "typings/lib/*",
+    "src/lib/*"
+  ]
+}
