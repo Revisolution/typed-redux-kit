@@ -8,16 +8,8 @@
   ],
   "license": "MIT",
   "scripts": {
-    "build": "npm run clean && npm run build:es && npm run build:node",
-    "build:es": "tsc -p . -d --declarationDir typings",
-    "build:node": "tsc -p . -m commonjs --outDir node-build",
-    "build:watch": "tsc -p . -w",
-    "test": "jest -c jest.json",
-    "test:watch": "jest --watch",
-    "test:quick": "jest",
-    "lint": "tslint -c ./tslint.json -p ./tsconfig.json",
-    "clean": "rimraf build typings node-build",
-    "prepublish": "npm run lint && npm run build && npm run test"
+    "build": "lerna run build",
+    "test": "lerna run test"
   },
   "repository": {
     "type": "git",
@@ -32,15 +24,6 @@
   },
   "homepage": "https://github.com/Revisolution/typed-redux-kit#readme",
   "devDependencies": {
-  },
-  "peerDependencies": {
-    "redux": "^3.0.0",
-    "redux-saga": "^0.15.6"
-  },
-  "files": [
-    "build/lib/*",
-    "node-build/lib/*",
-    "typings/lib/*",
-    "src/lib/*"
-  ]
+    "lerna": "^2.1.2"
+  }
 }
