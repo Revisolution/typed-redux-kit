@@ -85,3 +85,13 @@ Batch Enhancer has only one API, itself.
 ### `batchEnhancer(sagaMiddleware?: SagaMiddleware): Redux.GenericStoreEnhancer`
 
 Create batch enhancer with Saga middleware.
+
+## Author & Maintainer
+
+- [Stuart Schechter](https://github.com/UppaJung) : Author
+- [Junyoung Choi](https://github.com/rokt33r) : Author & Maintainer
+
+## License & Copyright
+
+Licensed under MIT
+Copyright 2017 Revisolution
