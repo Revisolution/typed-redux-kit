@@ -1,12 +1,14 @@
 # Typed Redux Kit
 
-Toolkit for Redux with Typescript
+Toolkit for Redux with Typescript.
 
-- [Home](../..)
-- [Base](../base)
-- [Mapped Reducer](../mapped-reducer)
-- [Batch Enhancer](../batch-enhancer)
-- [Trackable](../trackable)
+Check the below links.
+
+- [Home](https://github.com/Revisolution/typed-redux-kit/)
+- [Base](https://github.com/Revisolution/typed-redux-kit/tree/master/packages/base)
+- [Mapped Reducer](https://github.com/Revisolution/typed-redux-kit/tree/master/packages/mapped-reducer)
+- [Batch Enhancer](https://github.com/Revisolution/typed-redux-kit/tree/master/packages/batch-enhancer)
+- [Trackable](https://github.com/Revisolution/typed-redux-kit/tree/master/packages/trackable)
 
 ## Author & Maintainer
 
