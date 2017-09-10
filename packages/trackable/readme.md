@@ -20,6 +20,7 @@ import * as Redux from 'redux'
 import {
   trackEnhancer,
   TrackableRecord,
+  TrackableMap,
 } from '../lib'
 
 const CountRecord = TrackableRecord({
