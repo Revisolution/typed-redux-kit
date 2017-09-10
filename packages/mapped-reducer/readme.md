@@ -48,17 +48,17 @@ const setReducer = (state: State, action: Actions.SetAction) => ({
   ...action.payload,
 })
 
-const reducer = new MappedReducer<State>({
+const combinedReducer = new MappedReducer<State>({
   initialState: {
     count: 0,
   },
 })
 
-reducer
+combinedReducer
   .set(ActionTypes.Plus, plusReducer)
   .set(ActionTypes.Set, setReducer)
 
-const store = createStore(reducer.reduce)
+const store = createStore(combinedReducer.reduce)
 store.dispatch({
   type: ActionTypes.Plus,
 } as Actions.Plus)
@@ -69,13 +69,13 @@ If you want to set multiple reducers for one action, Try `MappedPipeReducer`.
 ```ts
 import { MappedPipeReducer } from 'typed-redux-kit.mapped-reducer'
 
-const reducer = new MappedPipeReducer<State>({
+const combinedReducer = new MappedPipeReducer<State>({
   initialState: {
     count: 0,
   },
 })
 
-reducer
+combinedReducer
   .set(ActionTypes.Plus, plusReducer)
   .set(ActionTypes.Set, setReducer)
   .set([
@@ -86,26 +86,26 @@ reducer
 
 Now, the both actions will be passed to `anotherReducer`
 
-And, for more convinence, **it accepts string enum**!
+And for more convinence, **it accepts string enum**!
 
 ```ts
-reducer
+combinedReducer
   .set(ActionTypes.Plus, plusReducer)
   .set(ActionTypes.Set, setReducer)
   .set(ActionTypes, anotherReducer)
 ```
 
-## Why it is good?
+## Why is this good?
 
-`combineReducer` always pass action to every its subreducer. When you build huge app, you probably have lots of reducers, splitted by domain. Here comes the problem. Although you've already splitted your reducers, every action will be passed to the reducer regardless your intention.
+`combinedReducer` will pass all actions to every one of its subreducers. When you build a huge app, you probably have lots of reducers, split by domain. Sometimes you want to share actions and this was developed to solve that problem. Even with reducers split by domain, actions can be passed to multiple reducers.
 
-Also, if you have lots of action types, lookup with Map is more efficient than one with `switch` statement. This is because Map keep a key as a hash.
+Also, if you have lots of action types, a lookup with Map is more efficient than one with a `switch` statement. This is because Map keeps a key as a hash.
 
 ## APIs
 
 ### `MappedReducer({initialState?: State})`
 
-Basic mapped reducer. It takes only option, `initialState`.
+Basic mapped reducer. It takes only one option, `initialState`.
 
 #### `#set(actionTypes: Action | Action[], reducer: Reducer): this`
 
@@ -125,7 +125,7 @@ Get a subreducer for the given action type(s).
 
 #### `#reduce(state: State, action: Action): State`
 
-This is the actual reducing method. You should pass this to `createStore` or `combineReducers`.
+This is the actual reducing method. You should pass this to `createStore` or `combinedReducers`.
 
 ```ts
 import {
@@ -145,11 +145,11 @@ const masterReducer = combineReducers({
 
 ### `MappedPipeReducer({initialState?: State})`
 
-MappedPipeReducer can have multiple sub reducers for the given action type(s).
+MappedPipeReducer can have multiple subreducers for a given action type(s).
 
 #### `#unshift(actionTypes: Action | Action[], reducerOrReducers: Reducer | Reducer[])`
 
-Prepend a subreducer to subreducer array of the given action type(s).
+Prepends a subreducer to a subreducer array of a given action type(s).
 
 ### `#prepend(actionTypes: Action | Action[], reducerOrReducers: Reducer | Reducer[])`
 
@@ -157,7 +157,7 @@ Alias of `#unshift`
 
 #### `#push(actionTypes: Action | Action[], reducerOrReducers: Reducer | Reducer[])`
 
-Append a subreducer to subreducer array of the given action type(s).
+Appends a subreducer to a subreducer array of a given action type(s).
 
 ### `#append(actionTypes: Action | Action[], reducerOrReducers: Reducer | Reducer[])`
 
@@ -165,23 +165,23 @@ Alias of `#push`
 
 #### `#set(actionTypes: Action | Action[], reducerOrReducers: Reducer | Reducer[])`
 
-Replace subreducer array of the given action type(s).
+Replaces a subreducer array of a given action type(s).
 
 #### `#delete(actionTypes: Action | Action[]): this`
 
-Delete all subreducers registered to the given action type(s).
+Deletes all subreducers registered of a given action type(s).
 
 #### `#get(actionType: Action)`
 
-Almost same to `MappedReducer#get`, but returns an array of reducers.
+Almost the same as `MappedReducer#get`, but returns an array of reducers.
 
 #### `#reduce(state: State, action: Action)`
 
-Same to `MappedReducer#reduce`.
+Same as `MappedReducer#reduce`.
 
 ## Polyfill
 
-MappedReducer is using Object.values. If you need to support legacy Node.js or browser, use the below polyfill or transpile again with babel
+MappedReducer is using Object.values. If you need to support legacy Node.js or browser, use the polyfill below or transpile it again with babel
 
 ```ts
 // Polyfill
