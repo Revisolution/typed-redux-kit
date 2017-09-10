@@ -2,6 +2,15 @@
 
 Let's dispatch array of actions!
 
+## Install
+
+```sh
+npm i typed-redux-kit.batch-enhancer
+
+# Or install typed-redux-kit
+npm i typed-redux-kit
+```
+
 ## Example
 
 ```ts

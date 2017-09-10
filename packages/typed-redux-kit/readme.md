@@ -10,6 +10,12 @@ Check the below links.
 - [Batch Enhancer](https://github.com/Revisolution/typed-redux-kit/tree/master/packages/batch-enhancer)
 - [Trackable](https://github.com/Revisolution/typed-redux-kit/tree/master/packages/trackable)
 
+## Install
+
+```sh
+npm i typed-redux-kit
+```
+
 ## Author & Maintainer
 
 - [Stuart Schechter](https://github.com/UppaJung) : Author

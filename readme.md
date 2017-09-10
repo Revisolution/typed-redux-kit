@@ -13,6 +13,12 @@ In this package, you can find several neat tricks.
 
 [basic-usage.spec.ts](./packages/typed-redux-kit/src/specs/basic-usage.spec.ts) presents how to combine all of toolkit.
 
+## Install
+
+```sh
+npm i typed-redux-kit
+```
+
 ## Author & Maintainer
 
 - [Stuart Schechter](https://github.com/UppaJung) : Author

@@ -4,6 +4,15 @@ Modify your state mutably!
 
 Trackable will track the mess you've done and make sure the modified state stays shiny new.
 
+## Install
+
+```sh
+npm i typed-redux-kit.trackable
+
+# Or install typed-redux-kit
+npm i typed-redux-kit
+```
+
 ## Examples
 
 ```ts

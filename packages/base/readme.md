@@ -4,6 +4,15 @@ Tools for basic usage of redux with Typescript
 
 It provides sevral convinent interfaces and functions to define `Redux.Action`.
 
+## Install
+
+```sh
+npm i typed-redux-kit.base
+
+# Or install typed-redux-kit
+npm i typed-redux-kit
+```
+
 ## Examples
 
 ```ts

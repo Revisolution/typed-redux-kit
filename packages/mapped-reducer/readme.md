@@ -2,6 +2,15 @@
 
 An efficient reducer exploiting ES6 Map for better lookup!
 
+## Install
+
+```sh
+npm i typed-redux-kit.mapped-reducer
+
+# Or install typed-redux-kit
+npm i typed-redux-kit
+```
+
 ## Examples
 
 ```ts
