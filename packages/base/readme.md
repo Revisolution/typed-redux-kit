@@ -2,7 +2,7 @@
 
 Tools for basic usage of redux with Typescript
 
-It provides sevral convinent interfaces and functions to define `Redux.Action`.
+It provides several convenient interfaces and functions to define `Redux.Action`.
 
 ## Install
 
@@ -88,9 +88,9 @@ An union type of `PureAction` and `PureAction`
 
 ### `createActionCreator<ACTION extends Action>(actionType)`
 
-It returns an action creator, which pass the first argument to payload property of an `Redux.Action`.
+It returns an action creator, which passes the first argument to the payload property of an `Redux.Action`.
 
-This is very simple function. The only benifit of this is that you can create strictly typed action creators with less typings.
+This is very simple function. The only benefit of this is that you can create strictly typed action creators with less typings.
 
 ```ts
 // With createActionCreator
@@ -103,10 +103,11 @@ createActionCreator<Actions.PlusAction>(ActionTypes.Plus)
 })
 ```
 
-## Author & Maintainer
+## Authors
 
-- [Stuart Schechter](https://github.com/UppaJung) : Author
-- [Junyoung Choi](https://github.com/rokt33r) : Author & Maintainer
+- [Stuart Schechter](https://github.com/UppaJung)
+- [Junyoung Choi](https://github.com/rokt33r) : Maintainer
+- [Joseph Stein](https://github.com/josephstein)
 
 ## License & Copyright
 

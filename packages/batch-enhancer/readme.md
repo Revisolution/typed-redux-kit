@@ -1,6 +1,6 @@
 # Batch Enhancer - Typed Redux Kit
 
-Let's dispatch array of actions!
+Let's dispatch an array of actions!
 
 ## Install
 
@@ -27,13 +27,13 @@ const enhancer = compose<Redux.StoreEnhancerStoreCreator<State>>(
   middlewareEnhancer,
   // If you're using saga, you must provide it to `batchEnhancer` rather than `applyMiddleware`
   batchEnhancer(sagaMiddleware),
-  // Otherwise, just call it without argument
+  // Otherwise, just call it without an argument
   // batchEnhancer(),
 )
 // Apply enhancer when
 const store = createStore(myReducer, enhancer)
 
-// Now you can dispatch array of actions
+// Now you can dispatch an array of actions
 store.dispatch([
   {
     type: 'SayHello',
@@ -46,7 +46,7 @@ store.dispatch([
   },
 ])
 
-// Also you can do it inside of saga generator too
+// You can do it inside of saga generator too
 function * saga () {
   while (true) {
     yield take('SayHello')
@@ -67,15 +67,15 @@ function * saga () {
 
 ## Why?
 
-Each dispatch, all components connected with Redux(`connect`) are re-rendered.
+With every dispatch, all components connected with Redux(`connect`) are re-rendered.
 
-For reusability, you want to have lots of atomic actions which does one thing well and reliably. Then, this make you have to dispatch series of actions.
+For reusability, you want to have lots of atomic actions which does one thing well and reliably. This forces you to dispatch a series of actions.
 
-Here comes the problem. Since each dispatch causes re-rendering, if you're app grows bigger, this problem becomes a disaster.
+Here comes the problem. Since each dispatch causes a render, when your app grows bigger, it triggers a bunch of unnecessary renders.
 
-With Batch Enhancer, you can control the timing of re-render. If you dispatch an array of actions, BatchEnhancer passes the all actions to reducer and resolves the final result.
+With Batch Enhancer, you can delay the rendering. If you dispatch an array of actions, BatchEnhancer passes the all actions to the reducer and renders on the final one.
 
-So, if you dispatch like the below example:
+So, if you dispatch like the example below:
 
 ```ts
 store.dispatch([
@@ -91,7 +91,7 @@ store.dispatch([
 ])
 ```
 
-Your state will be reduced 3 times. But, connected components will be re-rendered only one time.
+Your state will be reduced 3 times but connected components will be re-rendered only one time.
 
 ## APIs
 
@@ -101,10 +101,11 @@ Batch Enhancer has only one API, itself.
 
 Create batch enhancer with Saga middleware.
 
-## Author & Maintainer
+## Authors
 
-- [Stuart Schechter](https://github.com/UppaJung) : Author
-- [Junyoung Choi](https://github.com/rokt33r) : Author & Maintainer
+- [Stuart Schechter](https://github.com/UppaJung)
+- [Junyoung Choi](https://github.com/rokt33r) : Maintainer
+- [Joseph Stein](https://github.com/josephstein)
 
 ## License & Copyright
 

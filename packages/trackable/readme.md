@@ -2,7 +2,7 @@
 
 Modify your state mutably!
 
-Trackable will track the mess you've done and make sure the modified state stays shiny new.
+Trackable will track the mess you've done and make sure the modified state stays shiny & new.
 
 ## Install
 
@@ -39,7 +39,7 @@ const defaultState: State = new TrackableMap({
 
 const myReducer = (state: State = defaultState, action: Redux.Action) => {
   if (action.type === 'add') {
-    // You can change the data mutably!
+    // You can mutate the data directly!
     state.get('a').count++
   }
   return state
@@ -53,7 +53,7 @@ store.dispatch({
 
 const reducedState = store.getState()
 expect(reducedState.get('a').count).toBe(1)
-// We've modified mutably, but reduced state is different instance!
+// We've mutated it directly, but reduced state is a different instance!
 expect(reducedState).not.toBe(defaultState)
 ```
 
@@ -67,9 +67,9 @@ const myReducer = (state, action) => ({
   depth1: {
     ...state.depth1,
     depth2: {
-      ...state.depth2,
+      ...state.depth1.depth2,
       depth3: {
-        ...state.depth3,
+        ...state.depth1.depth2.depth3,
         depth4: action.payload
       },
     },
@@ -77,9 +77,9 @@ const myReducer = (state, action) => ({
 })
 ```
 
-It is super verbose so I've found lots of people make mistake when handling this kind of structure.
+This is super verbose and I've seen a lot of people make mistakes when handling this kind of structure.
 
-In this case, Immutable.js can fix.
+In this case, Immutable.js can fix it.
 
 ```ts
 const myReducer = (state, action) => (
@@ -87,7 +87,7 @@ const myReducer = (state, action) => (
 )
 ```
 
-But, here comes another problem. Its `getIn`, `setIn` and kind of `...In` methods takes string array to resolve keys. So, type inference of typescript doesn't work at all. To keep typeinference working, you have to do like this.
+But here comes another problem. Its `getIn`, `setIn` and similar `...In` methods take in a string array to resolve keys. So, type inference of typescript doesn't work at all. To keep typeinference working, you have to do like this.
 
 ```ts
 const myReducer = (state, action) => (
@@ -104,7 +104,7 @@ const myReducer = (state, action) => (
 
 This is horrible.
 
-But with Trackable, you can do like this:
+But with Trackable, you can do it like this:
 
 ```ts
 const myReducer = (state, action) => {
@@ -113,7 +113,7 @@ const myReducer = (state, action) => {
 }
 ```
 
-So, you don't have to worry your state is immutable. Also, type inference againt every depth works perfectly.
+Now you don't have to worry since your state is immutable. Also, type inference against every depth works perfectly.
 
 ## Todo
 
@@ -122,7 +122,7 @@ So, you don't have to worry your state is immutable. Also, type inference againt
 
 ## Polyfill
 
-Trackable is using Object.values and Object.entries. If you need to support legacy Node.js or browser, use the below polyfill or transpile again with babel
+Trackable is using Object.values and Object.entries. If you need to support legacy Node.js or browser, use the below polyfill or transpile again with babel:
 
 ```ts
 // Polyfill
@@ -144,10 +144,11 @@ if (!Object.entries) {
 }
 ```
 
-## Author & Maintainer
+## Authors
 
-- [Stuart Schechter](https://github.com/UppaJung) : Author
-- [Junyoung Choi](https://github.com/rokt33r) : Author & Maintainer
+- [Stuart Schechter](https://github.com/UppaJung)
+- [Junyoung Choi](https://github.com/rokt33r) : Maintainer
+- [Joseph Stein](https://github.com/josephstein)
 
 ## License & Copyright
 
