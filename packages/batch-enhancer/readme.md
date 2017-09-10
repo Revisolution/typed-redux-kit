@@ -14,6 +14,12 @@ npm i typed-redux-kit
 ## Example
 
 ```ts
+import { createStore, Action, StoreCreator, Store, StoreEnhancer, compose, applyMiddleware } from 'redux'
+import * as Redux from 'redux'
+import createSagaMiddleware, { SagaMiddleware } from 'redux-saga'
+import { fork, take, put } from 'redux-saga/effects'
+import batchEnhancer from 'typed-redux-kit.batch-enhancer'
+
 const sagaMiddleware = createSagaMiddleware()
 const middlewareEnhancer = applyMiddleware(sampleMiddleware)
 // Compose enhancer. You probably need this if you're using other middlewares like Redux Logger.

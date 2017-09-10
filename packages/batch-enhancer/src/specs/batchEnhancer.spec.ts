@@ -1,6 +1,6 @@
 import { createStore, Action, StoreCreator, Store, StoreEnhancer, compose, applyMiddleware } from 'redux'
 import * as Redux from 'redux'
-import createSagaMiddleware, {SagaMiddleware} from 'redux-saga'
+import createSagaMiddleware, { SagaMiddleware } from 'redux-saga'
 import { fork, take, put } from 'redux-saga/effects'
 import batchEnhancer from '../lib'
 

@@ -14,13 +14,16 @@ npm i typed-redux-kit
 ## Examples
 
 ```ts
+import { createStore } from 'redux'
 import { MappedReducer } from 'typed-redux-kit.mapped-reducer'
+import {
+  PureAction,
+  PayloadAction,
+} from 'typed-redux-kit.base'
 
 enum ActionTypes {
   Plus = 'test_Plus',
   Set = 'test_Set',
-  SayHello = 'test_SayHello',
-  SayBye = 'test_SayBye',
 }
 
 namespace Actions {
@@ -33,15 +36,14 @@ namespace Actions {
 
 interface State {
   count: number
-  message: string
 }
 
-const plusSubReducer = (state: State, action: Actions.PlusAction) => ({
+const plusReducer = (state: State, action: Actions.PlusAction) => ({
   ...state,
   count: state.count + 1,
 })
 
-const setSubReducer = (state: State, action: Actions.SetAction) => ({
+const setReducer = (state: State, action: Actions.SetAction) => ({
   ...state,
   ...action.payload,
 })
@@ -49,13 +51,12 @@ const setSubReducer = (state: State, action: Actions.SetAction) => ({
 const reducer = new MappedReducer<State>({
   initialState: {
     count: 0,
-    message: 'No message!',
   },
 })
 
 reducer
-  .set(ActionTypes.Plus, plusSubReducer)
-  .set(ActionTypes.Set, setSubReducer)
+  .set(ActionTypes.Plus, plusReducer)
+  .set(ActionTypes.Set, setReducer)
 
 const store = createStore(reducer.reduce)
 store.dispatch({
@@ -71,17 +72,16 @@ import { MappedPipeReducer } from 'typed-redux-kit.mapped-reducer'
 const reducer = new MappedPipeReducer<State>({
   initialState: {
     count: 0,
-    message: 'No message!',
   },
 })
 
 reducer
-  .set(ActionTypes.Plus, plusSubReducer)
-  .set(ActionTypes.Set, setSubReducer)
+  .set(ActionTypes.Plus, plusReducer)
+  .set(ActionTypes.Set, setReducer)
   .set([
     ActionTypes.Plus,
     ActionTypes.Set,
-  ], sayReducer)
+  ], anotherReducer)
 ```
 
 Now, the both actions will be passed to `sayReducer`
@@ -90,9 +90,9 @@ And, for more convinence, **it accepts string enum**!
 
 ```ts
 reducer
-  .set(ActionTypes.Plus, plusSubReducer)
-  .set(ActionTypes.Set, setSubReducer)
-  .set(ActionTypes, sayReducer)
+  .set(ActionTypes.Plus, plusReducer)
+  .set(ActionTypes.Set, setReducer)
+  .set(ActionTypes, anotherReducer)
 ```
 
 ## Why it is good?

@@ -16,6 +16,12 @@ npm i typed-redux-kit
 ## Examples
 
 ```ts
+import * as Redux from 'redux'
+import {
+  trackEnhancer,
+  TrackableRecord,
+} from '../lib'
+
 const CountRecord = TrackableRecord({
   count: 0,
 })
