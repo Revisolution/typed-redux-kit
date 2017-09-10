@@ -84,7 +84,7 @@ reducer
   ], anotherReducer)
 ```
 
-Now, the both actions will be passed to `sayReducer`
+Now, the both actions will be passed to `anotherReducer`
 
 And, for more convinence, **it accepts string enum**!
 
