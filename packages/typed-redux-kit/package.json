@@ -40,18 +40,26 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "jest": "^20.0.4",
     "redux": "^3.7.0",
+    "redux-saga": "^0.15.6",
     "rimraf": "^2.6.1",
     "source-map-support": "^0.4.15",
     "tslint": "^5.5.0",
     "typescript": "^2.5.2"
   },
   "peerDependencies": {
-    "redux": "^3.0.0"
+    "redux": "^3.0.0",
+    "redux-saga": "^0.15.6"
   },
   "files": [
     "build/lib/*",
     "node-build/lib/*",
     "typings/lib/*",
     "src/lib/*"
-  ]
+  ],
+  "dependencies": {
+    "typed-redux-kit.base": "^1.0.0-alpha.3",
+    "typed-redux-kit.batch-enhancer": "^1.0.0-alpha.1",
+    "typed-redux-kit.mapped-reducer": "^1.0.0-alpha.1",
+    "typed-redux-kit.trackable": "^1.0.0-alpha"
+  }
 }
