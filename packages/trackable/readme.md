@@ -67,9 +67,9 @@ const myReducer = (state, action) => ({
   depth1: {
     ...state.depth1,
     depth2: {
-      ...state.depth2,
+      ...state.depth1.depth2,
       depth3: {
-        ...state.depth3,
+        ...state.depth1.depth2.depth3,
         depth4: action.payload
       },
     },
