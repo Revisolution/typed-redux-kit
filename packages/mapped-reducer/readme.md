@@ -125,7 +125,7 @@ Get a subreducer for the given action type(s).
 
 #### `#reduce(state: State, action: Action): State`
 
-This is the actual reducing method. You should pass this to `createStore` or `combinedReducers`.
+This is the actual reducing method. You should pass this to `createStore` or `combineReducers`.
 
 ```ts
 import {
