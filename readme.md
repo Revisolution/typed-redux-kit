@@ -1,3 +1,5 @@
+This project is archived as there is nobody to maintain it and keep up with the security updates.  Feel free to fork and maintain.
+
 # Typed Redux Kit
 
 Toolkit for Redux with Typescript
